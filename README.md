@@ -10,6 +10,11 @@ For every contract we need to specify:
     - Types
     - Named Keys
 
+## Entry points
+- Don't include the groups information.
+- [task] Include context (Contract/Session).
+- [task] Include information about mutability. 
+
 ## Types serialization
 - [?] Include type name in front of the type. 
     - Advantage: disunbiguity,
