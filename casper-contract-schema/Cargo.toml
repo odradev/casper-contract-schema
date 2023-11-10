@@ -1,0 +1,14 @@
+[package]
+name = "casper-contract-schema"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+casper-types = { version = "3.0.0", features = ["json-schema"] }
+schemars = "0.8.5"
+serde = { version = "1.0.190", features = ["serde_derive"] }
+serde_json = "1.0.108"
+
+[[bin]]
+name = "json-schema"
+path = "bin/json-schema.rs"

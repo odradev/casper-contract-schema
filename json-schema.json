@@ -1,0 +1,327 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ContractSchema",
+  "type": "object",
+  "required": [
+    "casper_contract_schema_version",
+    "entry_points",
+    "events",
+    "name",
+    "toolchain",
+    "types"
+  ],
+  "properties": {
+    "casper_contract_schema_version": {
+      "type": "integer",
+      "format": "uint8",
+      "minimum": 0.0
+    },
+    "toolchain": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "entry_points": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Entrypoint"
+      }
+    },
+    "types": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/UserDefinedType"
+      }
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/Event"
+      }
+    }
+  },
+  "definitions": {
+    "Entrypoint": {
+      "type": "object",
+      "required": [
+        "args",
+        "contract_context",
+        "is_mutable",
+        "name",
+        "return_ty"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "is_mutable": {
+          "type": "boolean"
+        },
+        "args": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NamedType"
+          }
+        },
+        "return_ty": {
+          "$ref": "#/definitions/Type"
+        },
+        "contract_context": {
+          "type": "boolean"
+        }
+      }
+    },
+    "NamedType": {
+      "type": "object",
+      "required": [
+        "name",
+        "ty"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "ty": {
+          "$ref": "#/definitions/Type"
+        }
+      }
+    },
+    "Type": {
+      "anyOf": [
+        {
+          "type": "object",
+          "required": [
+            "System"
+          ],
+          "properties": {
+            "System": {
+              "$ref": "#/definitions/CLType"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": [
+            "UserDefined"
+          ],
+          "properties": {
+            "UserDefined": {
+              "$ref": "#/definitions/UserDefinedTypeName"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "CLType": {
+      "description": "Casper types, i.e. types which can be stored and manipulated by smart contracts.\n\nProvides a description of the underlying data type of a [`CLValue`](crate::CLValue).",
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "Bool",
+            "I32",
+            "I64",
+            "U8",
+            "U32",
+            "U64",
+            "U128",
+            "U256",
+            "U512",
+            "Unit",
+            "String",
+            "Key",
+            "URef",
+            "PublicKey",
+            "Any"
+          ]
+        },
+        {
+          "description": "`Option` of a `CLType`.",
+          "type": "object",
+          "required": [
+            "Option"
+          ],
+          "properties": {
+            "Option": {
+              "$ref": "#/definitions/CLType"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "Variable-length list of a single `CLType` (comparable to a `Vec`).",
+          "type": "object",
+          "required": [
+            "List"
+          ],
+          "properties": {
+            "List": {
+              "$ref": "#/definitions/CLType"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "Fixed-length list of a single `CLType` (comparable to a Rust array).",
+          "type": "object",
+          "required": [
+            "ByteArray"
+          ],
+          "properties": {
+            "ByteArray": {
+              "type": "integer",
+              "format": "uint32",
+              "minimum": 0.0
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "`Result` with `Ok` and `Err` variants of `CLType`s.",
+          "type": "object",
+          "required": [
+            "Result"
+          ],
+          "properties": {
+            "Result": {
+              "type": "object",
+              "required": [
+                "err",
+                "ok"
+              ],
+              "properties": {
+                "ok": {
+                  "$ref": "#/definitions/CLType"
+                },
+                "err": {
+                  "$ref": "#/definitions/CLType"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "Map with keys of a single `CLType` and values of a single `CLType`.",
+          "type": "object",
+          "required": [
+            "Map"
+          ],
+          "properties": {
+            "Map": {
+              "type": "object",
+              "required": [
+                "key",
+                "value"
+              ],
+              "properties": {
+                "key": {
+                  "$ref": "#/definitions/CLType"
+                },
+                "value": {
+                  "$ref": "#/definitions/CLType"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "1-ary tuple of a `CLType`.",
+          "type": "object",
+          "required": [
+            "Tuple1"
+          ],
+          "properties": {
+            "Tuple1": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CLType"
+              },
+              "maxItems": 1,
+              "minItems": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "2-ary tuple of `CLType`s.",
+          "type": "object",
+          "required": [
+            "Tuple2"
+          ],
+          "properties": {
+            "Tuple2": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CLType"
+              },
+              "maxItems": 2,
+              "minItems": 2
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "3-ary tuple of `CLType`s.",
+          "type": "object",
+          "required": [
+            "Tuple3"
+          ],
+          "properties": {
+            "Tuple3": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CLType"
+              },
+              "maxItems": 3,
+              "minItems": 3
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "UserDefinedTypeName": {
+      "type": "string"
+    },
+    "UserDefinedType": {
+      "type": "object",
+      "required": [
+        "members",
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/definitions/UserDefinedTypeName"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NamedType"
+          }
+        }
+      }
+    },
+    "Event": {
+      "type": "object",
+      "required": [
+        "name",
+        "ty"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "ty": {
+          "$ref": "#/definitions/Type"
+        }
+      }
+    }
+  }
+}
