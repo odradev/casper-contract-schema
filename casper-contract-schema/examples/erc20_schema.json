@@ -1,196 +1,203 @@
 {
   "casper_contract_schema_version": 1,
   "toolchain": "rustc 1.73.0 (cc66ad468 2023-10-03)",
-  "name": "Erc20",
+  "contract_name": "Erc20",
+  "contract_version": "0.1.0",
+  "types": [
+    {
+      "struct": {
+        "name": "Transfer",
+        "members": [
+          {
+            "name": "from",
+            "ty": {
+              "system": {
+                "Option": "Key"
+              }
+            }
+          },
+          {
+            "name": "to",
+            "ty": {
+              "system": {
+                "Option": "Key"
+              }
+            }
+          },
+          {
+            "name": "value",
+            "ty": {
+              "system": "U256"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "struct": {
+        "name": "Approval",
+        "members": [
+          {
+            "name": "owner",
+            "ty": {
+              "system": {
+                "Option": "Key"
+              }
+            }
+          },
+          {
+            "name": "spender",
+            "ty": {
+              "system": {
+                "Option": "Key"
+              }
+            }
+          },
+          {
+            "name": "value",
+            "ty": {
+              "system": "U256"
+            }
+          }
+        ]
+      }
+    }
+  ],
   "entry_points": [
     {
       "name": "transfer",
       "is_mutable": true,
+      "is_payable": false,
       "args": [
         {
           "name": "recipient",
           "ty": {
-            "System": "Key"
+            "system": "Key"
           }
         },
         {
           "name": "amount",
           "ty": {
-            "System": "U256"
+            "system": "U256"
           }
         }
       ],
       "return_ty": {
-        "System": "Unit"
+        "system": "Unit"
       },
       "contract_context": true
     },
     {
       "name": "transfer_from",
       "is_mutable": true,
+      "is_payable": false,
       "args": [
         {
           "name": "owner",
           "ty": {
-            "System": "Key"
+            "system": "Key"
           }
         },
         {
           "name": "recipient",
           "ty": {
-            "System": "Key"
+            "system": "Key"
           }
         },
         {
           "name": "amount",
           "ty": {
-            "System": "U256"
+            "system": "U256"
           }
         }
       ],
       "return_ty": {
-        "System": "Unit"
+        "system": "Unit"
       },
       "contract_context": true
     },
     {
       "name": "approve",
       "is_mutable": true,
+      "is_payable": false,
       "args": [
         {
           "name": "spender",
           "ty": {
-            "System": "Key"
+            "system": "Key"
           }
         },
         {
           "name": "amount",
           "ty": {
-            "System": "U256"
+            "system": "U256"
           }
         }
       ],
       "return_ty": {
-        "System": "Unit"
+        "system": "Unit"
       },
       "contract_context": true
     },
     {
       "name": "allowance",
       "is_mutable": false,
+      "is_payable": false,
       "args": [
         {
           "name": "owner",
           "ty": {
-            "System": "Key"
+            "system": "Key"
           }
         },
         {
           "name": "spender",
           "ty": {
-            "System": "Key"
+            "system": "Key"
           }
         }
       ],
       "return_ty": {
-        "System": "U256"
+        "system": "U256"
       },
       "contract_context": true
     },
     {
       "name": "balance_of",
       "is_mutable": false,
+      "is_payable": false,
       "args": [
         {
           "name": "owner",
           "ty": {
-            "System": "Key"
+            "system": "Key"
           }
         }
       ],
       "return_ty": {
-        "System": "U256"
+        "system": "U256"
       },
       "contract_context": true
     },
     {
       "name": "total_supply",
       "is_mutable": false,
+      "is_payable": false,
       "args": [],
       "return_ty": {
-        "System": "U256"
+        "system": "U256"
       },
       "contract_context": true
     }
   ],
-  "types": [
-    {
-      "name": "Transfer",
-      "members": [
-        {
-          "name": "from",
-          "ty": {
-            "System": {
-              "Option": "Key"
-            }
-          }
-        },
-        {
-          "name": "to",
-          "ty": {
-            "System": {
-              "Option": "Key"
-            }
-          }
-        },
-        {
-          "name": "value",
-          "ty": {
-            "System": "U256"
-          }
-        }
-      ]
-    },
-    {
-      "name": "Approval",
-      "members": [
-        {
-          "name": "owner",
-          "ty": {
-            "System": {
-              "Option": "Key"
-            }
-          }
-        },
-        {
-          "name": "spender",
-          "ty": {
-            "System": {
-              "Option": "Key"
-            }
-          }
-        },
-        {
-          "name": "value",
-          "ty": {
-            "System": "U256"
-          }
-        }
-      ]
-    }
-  ],
   "events": [
     {
-      "name": "Transfer",
-      "ty": {
-        "UserDefined": "Transfer"
-      }
+      "name": "event_Transfer",
+      "ty": "Transfer"
     },
     {
-      "name": "Approval",
-      "ty": {
-        "UserDefined": "Approval"
-      }
+      "name": "event_Approval",
+      "ty": "Approval"
     }
   ]
 }

@@ -1,0 +1,108 @@
+{
+  "casper_contract_schema_version": 1,
+  "toolchain": "rustc 1.73.0 (cc66ad468 2023-10-03)",
+  "contract_name": "DNS",
+  "contract_version": "0.1.3",
+  "types": [
+    {
+      "enum": {
+        "name": "IP",
+        "variants": [
+          {
+            "name": "IPv4",
+            "ty": {
+              "system": {
+                "ByteArray": 4
+              }
+            }
+          },
+          {
+            "name": "IPv6",
+            "ty": {
+              "system": {
+                "ByteArray": 16
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "struct": {
+        "name": "DNSRecord",
+        "members": [
+          {
+            "name": "name",
+            "ty": {
+              "system": "String"
+            }
+          },
+          {
+            "name": "ip",
+            "ty": {
+              "custom": "IP"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "entry_points": [
+    {
+      "name": "add_record",
+      "is_mutable": true,
+      "is_payable": true,
+      "args": [
+        {
+          "name": "name",
+          "ty": {
+            "system": "String"
+          }
+        },
+        {
+          "name": "ip",
+          "ty": {
+            "custom": "IP"
+          }
+        }
+      ],
+      "return_ty": {
+        "system": "Unit"
+      },
+      "contract_context": true
+    },
+    {
+      "name": "remove_record",
+      "is_mutable": true,
+      "is_payable": false,
+      "args": [
+        {
+          "name": "name",
+          "ty": {
+            "system": "String"
+          }
+        },
+        {
+          "name": "ip",
+          "ty": {
+            "custom": "IP"
+          }
+        }
+      ],
+      "return_ty": {
+        "system": "Unit"
+      },
+      "contract_context": true
+    }
+  ],
+  "events": [
+    {
+      "name": "event_RecordAdded",
+      "ty": "DNSRecord"
+    },
+    {
+      "name": "event_RecordRemoved",
+      "ty": "DNSRecord"
+    }
+  ]
+}

@@ -6,9 +6,10 @@ use serde::{Deserialize, Serialize};
 pub struct ContractSchema {
     pub casper_contract_schema_version: u8,
     pub toolchain: String,
-    pub name: String,
+    pub contract_name: String,
+    pub contract_version: String,
+    pub types: Vec<CustomType>,
     pub entry_points: Vec<Entrypoint>,
-    pub types: Vec<UserDefinedType>,
     pub events: Vec<Event>,
 }
 
@@ -16,6 +17,7 @@ pub struct ContractSchema {
 pub struct Entrypoint {
     pub name: String,
     pub is_mutable: bool,
+    pub is_payable: bool,
     pub args: Vec<NamedType>,
     pub return_ty: Type,
     pub contract_context: bool,
@@ -34,12 +36,20 @@ impl NamedType {
             ty: Type::System(ty),
         }
     }
+
+    pub fn custom(name: &str, ty: &str) -> Self {
+        Self {
+            name: String::from(name),
+            ty: Type::Custom(TypeName::new(ty)),
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
 pub enum Type {
     System(CLType),
-    UserDefined(UserDefinedTypeName),
+    Custom(TypeName),
 }
 
 impl Type {
@@ -49,31 +59,38 @@ impl Type {
 }
 
 #[derive(Serialize, Deserialize, JsonSchema)]
-pub struct UserDefinedTypeName(pub String);
+pub struct TypeName(pub String);
 
-impl UserDefinedTypeName {
+impl TypeName {
     pub fn new(name: &str) -> Self {
         Self(String::from(name))
     }
 }
 
 #[derive(Serialize, Deserialize, JsonSchema)]
-pub struct UserDefinedType {
-    pub name: UserDefinedTypeName,
-    pub members: Vec<NamedType>,
+#[serde(rename_all = "snake_case")]
+pub enum CustomType {
+    Struct { name: TypeName, members: Vec<NamedType> },
+    Enum { name: TypeName, variants: Vec<EnumVariant> },
+}
+
+#[derive(Serialize, Deserialize, JsonSchema)]
+pub struct EnumVariant {
+    pub name: String,
+    pub ty: Type,
 }
 
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct Event {
     pub name: String,
-    pub ty: Type,
+    pub ty: TypeName,
 }
 
 impl Event {
-    pub fn custom(name: &str) -> Self {
+    pub fn new(name: &str, ty: &str) -> Self {
         Self {
             name: String::from(name),
-            ty: Type::UserDefined(UserDefinedTypeName(String::from(name))),
+            ty: TypeName(String::from(ty)),
         }
     }
 }
