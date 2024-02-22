@@ -5,24 +5,67 @@
   "contract_version": "0.1.3",
   "types": [
     {
+      "struct": {
+        "name": "IP::IPv6",
+        "members": [
+          {
+            "name": "ip",
+            "ty": {
+              "ByteArray": 16
+            }
+          }
+        ]
+      }
+    },
+    {
+      "struct": {
+        "name": "IP::IPv6WithDescription",
+        "members": [
+          {
+            "name": "ip",
+            "ty": {
+              "ByteArray": 16
+            }
+          },
+          {
+            "name": "description",
+            "ty": "String"
+          }
+        ]
+      }
+    },
+    {
       "enum": {
         "name": "IP",
         "variants": [
           {
             "name": "IPv4",
+            "discriminant": 0,
             "ty": {
-              "system": {
-                "ByteArray": 4
-              }
+              "ByteArray": 4
+            }
+          },
+          {
+            "name": "IPv4WithDescription",
+            "discriminant": 1,
+            "ty": {
+              "Tuple2": [
+                {
+                  "ByteArray": 4
+                },
+                "String"
+              ]
             }
           },
           {
             "name": "IPv6",
-            "ty": {
-              "system": {
-                "ByteArray": 16
-              }
-            }
+            "discriminant": 2,
+            "ty": "IP::IPv6"
+          },
+          {
+            "name": "IPv6WithDescription",
+            "discriminant": 3,
+            "ty": "IP::IPv6WithDescription"
           }
         ]
       }
@@ -33,15 +76,11 @@
         "members": [
           {
             "name": "name",
-            "ty": {
-              "system": "String"
-            }
+            "ty": "String"
           },
           {
             "name": "ip",
-            "ty": {
-              "custom": "IP"
-            }
+            "ty": "IP"
           }
         ]
       }
@@ -55,20 +94,14 @@
       "args": [
         {
           "name": "name",
-          "ty": {
-            "system": "String"
-          }
+          "ty": "String"
         },
         {
           "name": "ip",
-          "ty": {
-            "custom": "IP"
-          }
+          "ty": "IP"
         }
       ],
-      "return_ty": {
-        "system": "Unit"
-      },
+      "return_ty": "Unit",
       "contract_context": true
     },
     {
@@ -78,20 +111,14 @@
       "args": [
         {
           "name": "name",
-          "ty": {
-            "system": "String"
-          }
+          "ty": "String"
         },
         {
           "name": "ip",
-          "ty": {
-            "custom": "IP"
-          }
+          "ty": "IP"
         }
       ],
-      "return_ty": {
-        "system": "Unit"
-      },
+      "return_ty": "Unit",
       "contract_context": true
     }
   ],

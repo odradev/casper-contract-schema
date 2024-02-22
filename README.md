@@ -1,12 +1,13 @@
 # Casper Contract Schema
 
-Repository that includes The Casper Contract Schema.
-It sepcifies how to communicate with a contract.
+Welcome to our Casper Contract Schema repository! This is where we're building a
+standard way to connect smart contracts with the world on the Casper network.
+It's all about making blockchain apps work better together, and we need your
+help to make it even better. Using the Casper Contract Schema means your
+blockchain projects will be more compatible and easier to develop.
 
 ## Examples
-See [erc20_schema.json](./casper-contract-schema/examples/erc20_schema.json) and
-[dns_schema.json](./casper-contract-schema/examples/dns_schema.json) for example
-usages.
+See [erc20_schema.json] and [dns_schema.json] for an example usages.
 
 To update the schema after code changes, run:
 ```bash
@@ -33,7 +34,12 @@ and `events`. Custom types can be constructed out of CLTypes and other custom ty
 
 There are two kinds of types:
 - `struct` - Represents a struct kind of data with a list of named fields.
-- `enum` - Represents an enum type with a list of named variants.
+- `enum` - Represents an enum type with a list of named variants. There three modes when defining variants:
+    - `single unnnamed field` - variant with a single unnamed field is encoded as is,
+    - `multiple unnamed fields` - variant with multiple unnamed fields are packed into a tuple,
+    - `named fields` - variant with named fields are encoded as a struct.
+
+See [dns_schema.json] for all the examples.
 
 > Casper 2.0 no longer plans to use the CLType format. Yet it should be still
 > used here because CLType is implementend already in all SDKs. For 2.0 we might
@@ -56,3 +62,6 @@ Events are a list of named types. Each event has following properties:
 - `ty` - Type of the event.
 
 It is design to allow reuse the same type with different names.
+
+[dns_schema.json]: ./casper-contract-schema/examples/dns_schema.json
+[erc20_schema.json]: ./casper-contract-schema/examples/erc20_schema.json

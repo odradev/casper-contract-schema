@@ -11,24 +11,18 @@
           {
             "name": "from",
             "ty": {
-              "system": {
-                "Option": "Key"
-              }
+              "Option": "Key"
             }
           },
           {
             "name": "to",
             "ty": {
-              "system": {
-                "Option": "Key"
-              }
+              "Option": "Key"
             }
           },
           {
             "name": "value",
-            "ty": {
-              "system": "U256"
-            }
+            "ty": "U256"
           }
         ]
       }
@@ -40,24 +34,18 @@
           {
             "name": "owner",
             "ty": {
-              "system": {
-                "Option": "Key"
-              }
+              "Option": "Key"
             }
           },
           {
             "name": "spender",
             "ty": {
-              "system": {
-                "Option": "Key"
-              }
+              "Option": "Key"
             }
           },
           {
             "name": "value",
-            "ty": {
-              "system": "U256"
-            }
+            "ty": "U256"
           }
         ]
       }
@@ -71,20 +59,14 @@
       "args": [
         {
           "name": "recipient",
-          "ty": {
-            "system": "Key"
-          }
+          "ty": "Key"
         },
         {
           "name": "amount",
-          "ty": {
-            "system": "U256"
-          }
+          "ty": "U256"
         }
       ],
-      "return_ty": {
-        "system": "Unit"
-      },
+      "return_ty": "Unit",
       "contract_context": true
     },
     {
@@ -94,26 +76,18 @@
       "args": [
         {
           "name": "owner",
-          "ty": {
-            "system": "Key"
-          }
+          "ty": "Key"
         },
         {
           "name": "recipient",
-          "ty": {
-            "system": "Key"
-          }
+          "ty": "Key"
         },
         {
           "name": "amount",
-          "ty": {
-            "system": "U256"
-          }
+          "ty": "U256"
         }
       ],
-      "return_ty": {
-        "system": "Unit"
-      },
+      "return_ty": "Unit",
       "contract_context": true
     },
     {
@@ -123,20 +97,14 @@
       "args": [
         {
           "name": "spender",
-          "ty": {
-            "system": "Key"
-          }
+          "ty": "Key"
         },
         {
           "name": "amount",
-          "ty": {
-            "system": "U256"
-          }
+          "ty": "U256"
         }
       ],
-      "return_ty": {
-        "system": "Unit"
-      },
+      "return_ty": "Unit",
       "contract_context": true
     },
     {
@@ -146,20 +114,14 @@
       "args": [
         {
           "name": "owner",
-          "ty": {
-            "system": "Key"
-          }
+          "ty": "Key"
         },
         {
           "name": "spender",
-          "ty": {
-            "system": "Key"
-          }
+          "ty": "Key"
         }
       ],
-      "return_ty": {
-        "system": "U256"
-      },
+      "return_ty": "U256",
       "contract_context": true
     },
     {
@@ -169,14 +131,10 @@
       "args": [
         {
           "name": "owner",
-          "ty": {
-            "system": "Key"
-          }
+          "ty": "Key"
         }
       ],
-      "return_ty": {
-        "system": "U256"
-      },
+      "return_ty": "U256",
       "contract_context": true
     },
     {
@@ -184,9 +142,7 @@
       "is_mutable": false,
       "is_payable": false,
       "args": [],
-      "return_ty": {
-        "system": "U256"
-      },
+      "return_ty": "U256",
       "contract_context": true
     }
   ],

@@ -47,6 +47,7 @@ impl NamedType {
 
 #[derive(Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
+#[serde(untagged)]
 pub enum Type {
     System(CLType),
     Custom(TypeName),
@@ -77,6 +78,7 @@ pub enum CustomType {
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct EnumVariant {
     pub name: String,
+    pub discriminant: u8,
     pub ty: Type,
 }
 
