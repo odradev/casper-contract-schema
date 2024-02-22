@@ -6,6 +6,12 @@ It's all about making blockchain apps work better together, and we need your
 help to make it even better. Using the Casper Contract Schema means your
 blockchain projects will be more compatible and easier to develop.
 
+## How you can help
+
+We're looking for feedback on the schema, and we'd love to hear from you. If you
+have any ideas, suggestions, or questions, please open an issue or a pull
+request.
+
 ## Examples
 See [erc20_schema.json] and [dns_schema.json] for an example usages.
 
