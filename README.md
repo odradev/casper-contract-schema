@@ -74,10 +74,12 @@ has following properties:
 - `name` - Name of the entry point.
 - `description` - Description of the entry point.
 - `is_mutable` - Whether the entry point is mutable or not.
-- `args` - List of named arguments to the entry point.
+- `arguments` - List of named arguments to the entry point.
 - `return_ty` - Return type of the entry point.
 - `is_contract_context`: If `true` then it is contract context, otherwise
   session context.
+- `access` - Access control for the entry point. It can be `public` or `group`
+  with a list of groups.
 
 ### Events
 Events are a list of named types. Each event has following properties:
