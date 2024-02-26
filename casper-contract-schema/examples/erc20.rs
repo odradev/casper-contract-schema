@@ -55,7 +55,9 @@ pub fn example_erc20_schema() -> ContractSchema {
             },
             Entrypoint {
                 name: String::from("approve"),
-                description: Some(String::from("Approve spender to use tokens on behalf of the owner")),
+                description: Some(String::from(
+                    "Approve spender to use tokens on behalf of the owner",
+                )),
                 is_mutable: true,
                 arguments: vec![
                     Argument::cl("spender", "", Key::cl_type()),
@@ -67,7 +69,9 @@ pub fn example_erc20_schema() -> ContractSchema {
             },
             Entrypoint {
                 name: String::from("allowance"),
-                description: Some(String::from("Check the amount of tokens that an owner allowed to a spender")),
+                description: Some(String::from(
+                    "Check the amount of tokens that an owner allowed to a spender",
+                )),
                 is_mutable: false,
                 arguments: vec![
                     Argument::cl("owner", "", Key::cl_type()),
@@ -79,7 +83,9 @@ pub fn example_erc20_schema() -> ContractSchema {
             },
             Entrypoint {
                 name: String::from("balance_of"),
-                description: Some(String::from("Check the amount of tokens owned by an account")),
+                description: Some(String::from(
+                    "Check the amount of tokens owned by an account",
+                )),
                 is_mutable: false,
                 arguments: vec![Argument::cl("owner", "", Key::cl_type())],
                 return_ty: Type::System(U256::cl_type()),
@@ -98,14 +104,22 @@ pub fn example_erc20_schema() -> ContractSchema {
         ],
         events: vec![
             Event::new("event_Transfer", "Transfer"),
-            Event::new("event_Approval", "Approval")
+            Event::new("event_Approval", "Approval"),
         ],
-        call: Some(CallMethod::new("erc20.wasm", "Fungable token", vec![
-            Argument::cl("name", "Name of the token", String::cl_type()),
-            Argument::cl("symbol", "Symbol of the token", String::cl_type()),
-            Argument::cl("decimals", "Number of decimals", u8::cl_type()),
-            Argument::cl("initial_supply", "Initial supply of tokens", U256::cl_type()),
-        ]))
+        call: Some(CallMethod::new(
+            "erc20.wasm",
+            "Fungable token",
+            vec![
+                Argument::cl("name", "Name of the token", String::cl_type()),
+                Argument::cl("symbol", "Symbol of the token", String::cl_type()),
+                Argument::cl("decimals", "Number of decimals", u8::cl_type()),
+                Argument::cl(
+                    "initial_supply",
+                    "Initial supply of tokens",
+                    U256::cl_type(),
+                ),
+            ],
+        )),
     }
 }
 

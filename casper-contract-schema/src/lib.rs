@@ -71,7 +71,7 @@ pub enum Access {
 pub struct StructMember {
     pub name: String,
     pub description: Option<String>,
-    pub ty: Type
+    pub ty: Type,
 }
 
 impl StructMember {
@@ -126,8 +126,16 @@ impl TypeName {
 #[derive(Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum CustomType {
-    Struct { name: TypeName, description: Option<String>, members: Vec<StructMember> },
-    Enum { name: TypeName, description: Option<String>, variants: Vec<EnumVariant> },
+    Struct {
+        name: TypeName,
+        description: Option<String>,
+        members: Vec<StructMember>,
+    },
+    Enum {
+        name: TypeName,
+        description: Option<String>,
+        variants: Vec<EnumVariant>,
+    },
 }
 
 #[derive(Serialize, Deserialize, JsonSchema)]

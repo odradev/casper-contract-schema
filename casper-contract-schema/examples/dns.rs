@@ -1,4 +1,7 @@
-use casper_contract_schema::{Access, Argument, ContractSchema, CustomType, Entrypoint, EnumVariant, Event, StructMember, Type, TypeName};
+use casper_contract_schema::{
+    Access, Argument, ContractSchema, CustomType, Entrypoint, EnumVariant, Event, StructMember,
+    Type, TypeName,
+};
 use casper_types::CLTyped;
 
 type IPv4 = [u8; 4];
@@ -6,9 +9,9 @@ type IPv6 = [u8; 16];
 
 #[allow(dead_code)]
 enum IP {
-    IPv4(IPv4), // single unnamed element,
-    IPv4WithDescription(IPv4, String), // multiple unnamed elements,
-    IPv6 { ip: IPv6 }, // single named element,
+    IPv4(IPv4),                                            // single unnamed element,
+    IPv4WithDescription(IPv4, String),                     // multiple unnamed elements,
+    IPv6 { ip: IPv6 },                                     // single named element,
     IPv6WithDescription { ip: IPv6, description: String }, // multiple named elements,
 }
 
@@ -22,9 +25,7 @@ fn enum_example_schema() -> ContractSchema {
             CustomType::Struct {
                 name: TypeName::new("IP::IPv6"),
                 description: None,
-                members: vec![
-                    StructMember::cl("ip", "", IPv6::cl_type()),
-                ],
+                members: vec![StructMember::cl("ip", "", IPv6::cl_type())],
             },
             CustomType::Struct {
                 name: TypeName::new("IP::IPv6WithDescription"),
@@ -71,7 +72,7 @@ fn enum_example_schema() -> ContractSchema {
                     StructMember::cl("name", "Domain name", String::cl_type()),
                     StructMember::custom("ip", "", "IP"),
                 ],
-            }
+            },
         ],
         entry_points: vec![
             Entrypoint {
@@ -101,7 +102,7 @@ fn enum_example_schema() -> ContractSchema {
         ],
         events: vec![
             Event::new("event_RecordAdded", "DNSRecord"),
-            Event::new("event_RecordRemoved", "DNSRecord")
+            Event::new("event_RecordRemoved", "DNSRecord"),
         ],
         call: None,
     }
