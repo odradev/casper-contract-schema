@@ -1,4 +1,4 @@
-use casper_contract_schema::{ContractSchema, CustomType, Entrypoint, EnumVariant, Event, NamedType, Type, TypeName};
+use casper_contract_schema::{Access, Argument, ContractSchema, CustomType, Entrypoint, EnumVariant, Event, StructMember, Type, TypeName};
 use casper_types::CLTyped;
 
 type IPv4 = [u8; 4];
@@ -21,37 +21,44 @@ fn enum_example_schema() -> ContractSchema {
         types: vec![
             CustomType::Struct {
                 name: TypeName::new("IP::IPv6"),
+                description: None,
                 members: vec![
-                    NamedType::cl("ip", IPv6::cl_type()),
+                    StructMember::cl("ip", "", IPv6::cl_type()),
                 ],
             },
             CustomType::Struct {
                 name: TypeName::new("IP::IPv6WithDescription"),
+                description: None,
                 members: vec![
-                    NamedType::cl("ip", IPv6::cl_type()),
-                    NamedType::cl("description", String::cl_type()),
+                    StructMember::cl("ip", "", IPv6::cl_type()),
+                    StructMember::cl("description", "", String::cl_type()),
                 ],
             },
             CustomType::Enum {
                 name: TypeName::new("IP"),
+                description: Some(String::from("IP address")),
                 variants: vec![
                     EnumVariant {
                         name: String::from("IPv4"),
+                        description: Some(String::from("IPv4 address")),
                         discriminant: 0,
                         ty: Type::System(IPv4::cl_type()),
                     },
                     EnumVariant {
                         name: String::from("IPv4WithDescription"),
+                        description: Some(String::from("IPv4 address with description")),
                         discriminant: 1,
                         ty: Type::System(<(IPv4, String)>::cl_type()),
                     },
                     EnumVariant {
                         name: String::from("IPv6"),
+                        description: Some(String::from("IPv6 address")),
                         discriminant: 2,
                         ty: Type::Custom(TypeName::new("IP::IPv6")),
                     },
                     EnumVariant {
                         name: String::from("IPv6WithDescription"),
+                        description: Some(String::from("IPv6 address with description")),
                         discriminant: 3,
                         ty: Type::Custom(TypeName::new("IP::IPv6WithDescription")),
                     },
@@ -59,40 +66,44 @@ fn enum_example_schema() -> ContractSchema {
             },
             CustomType::Struct {
                 name: TypeName::new("DNSRecord"),
+                description: Some(String::from("DNS record")),
                 members: vec![
-                    NamedType::cl("name", String::cl_type()),
-                    NamedType::custom("ip", "IP"),
+                    StructMember::cl("name", "Domain name", String::cl_type()),
+                    StructMember::custom("ip", "", "IP"),
                 ],
             }
         ],
         entry_points: vec![
             Entrypoint {
                 name: String::from("add_record"),
+                description: None,
                 is_mutable: true,
-                is_payable: true,
-                args: vec![
-                    NamedType::cl("name", String::cl_type()),
-                    NamedType::custom("ip", "IP"),
+                arguments: vec![
+                    Argument::cl("name", "", String::cl_type()),
+                    Argument::custom("ip", "", "IP"),
                 ],
                 return_ty: Type::unit(),
-                contract_context: true,
+                is_contract_context: true,
+                access: Access::Public,
             },
             Entrypoint {
                 name: String::from("remove_record"),
+                description: Some(String::from("Remove a DNS record")),
                 is_mutable: true,
-                is_payable: false,
-                args: vec![
-                    NamedType::cl("name", String::cl_type()),
-                    NamedType::custom("ip", "IP"),
+                arguments: vec![
+                    Argument::cl("name", "", String::cl_type()),
+                    Argument::custom("ip", "", "IP"),
                 ],
                 return_ty: Type::unit(),
-                contract_context: true,
+                is_contract_context: true,
+                access: Access::Groups(vec![String::from("admin"), String::from("moderator")]),
             },
         ],
         events: vec![
             Event::new("event_RecordAdded", "DNSRecord"),
             Event::new("event_RecordRemoved", "DNSRecord")
         ],
+        call: None,
     }
 }
 

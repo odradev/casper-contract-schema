@@ -7,9 +7,11 @@
     {
       "struct": {
         "name": "IP::IPv6",
+        "description": null,
         "members": [
           {
             "name": "ip",
+            "description": null,
             "ty": {
               "ByteArray": 16
             }
@@ -20,15 +22,18 @@
     {
       "struct": {
         "name": "IP::IPv6WithDescription",
+        "description": null,
         "members": [
           {
             "name": "ip",
+            "description": null,
             "ty": {
               "ByteArray": 16
             }
           },
           {
             "name": "description",
+            "description": null,
             "ty": "String"
           }
         ]
@@ -37,9 +42,11 @@
     {
       "enum": {
         "name": "IP",
+        "description": "IP address",
         "variants": [
           {
             "name": "IPv4",
+            "description": "IPv4 address",
             "discriminant": 0,
             "ty": {
               "ByteArray": 4
@@ -47,6 +54,7 @@
           },
           {
             "name": "IPv4WithDescription",
+            "description": "IPv4 address with description",
             "discriminant": 1,
             "ty": {
               "Tuple2": [
@@ -59,11 +67,13 @@
           },
           {
             "name": "IPv6",
+            "description": "IPv6 address",
             "discriminant": 2,
             "ty": "IP::IPv6"
           },
           {
             "name": "IPv6WithDescription",
+            "description": "IPv6 address with description",
             "discriminant": 3,
             "ty": "IP::IPv6WithDescription"
           }
@@ -73,13 +83,16 @@
     {
       "struct": {
         "name": "DNSRecord",
+        "description": "DNS record",
         "members": [
           {
             "name": "name",
+            "description": "Domain name",
             "ty": "String"
           },
           {
             "name": "ip",
+            "description": null,
             "ty": "IP"
           }
         ]
@@ -89,37 +102,52 @@
   "entry_points": [
     {
       "name": "add_record",
+      "description": null,
       "is_mutable": true,
-      "is_payable": true,
-      "args": [
+      "arguments": [
         {
           "name": "name",
-          "ty": "String"
+          "description": null,
+          "ty": "String",
+          "optional": false
         },
         {
           "name": "ip",
-          "ty": "IP"
+          "description": null,
+          "ty": "IP",
+          "optional": false
         }
       ],
       "return_ty": "Unit",
-      "contract_context": true
+      "is_contract_context": true,
+      "access": "public"
     },
     {
       "name": "remove_record",
+      "description": "Remove a DNS record",
       "is_mutable": true,
-      "is_payable": false,
-      "args": [
+      "arguments": [
         {
           "name": "name",
-          "ty": "String"
+          "description": null,
+          "ty": "String",
+          "optional": false
         },
         {
           "name": "ip",
-          "ty": "IP"
+          "description": null,
+          "ty": "IP",
+          "optional": false
         }
       ],
       "return_ty": "Unit",
-      "contract_context": true
+      "is_contract_context": true,
+      "access": {
+        "groups": [
+          "admin",
+          "moderator"
+        ]
+      }
     }
   ],
   "events": [

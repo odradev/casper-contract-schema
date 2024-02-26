@@ -7,21 +7,25 @@
     {
       "struct": {
         "name": "Transfer",
+        "description": "Transfer event",
         "members": [
           {
             "name": "from",
+            "description": "Sender of tokens.",
             "ty": {
               "Option": "Key"
             }
           },
           {
             "name": "to",
+            "description": "Recipient of tokens.",
             "ty": {
               "Option": "Key"
             }
           },
           {
             "name": "value",
+            "description": "Transfered amount.",
             "ty": "U256"
           }
         ]
@@ -30,21 +34,25 @@
     {
       "struct": {
         "name": "Approval",
+        "description": "Approval event",
         "members": [
           {
             "name": "owner",
+            "description": null,
             "ty": {
               "Option": "Key"
             }
           },
           {
             "name": "spender",
+            "description": null,
             "ty": {
               "Option": "Key"
             }
           },
           {
             "name": "value",
+            "description": null,
             "ty": "U256"
           }
         ]
@@ -54,96 +62,122 @@
   "entry_points": [
     {
       "name": "transfer",
+      "description": "Transfer tokens to another account",
       "is_mutable": true,
-      "is_payable": false,
-      "args": [
+      "arguments": [
         {
           "name": "recipient",
-          "ty": "Key"
+          "description": null,
+          "ty": "Key",
+          "optional": false
         },
         {
           "name": "amount",
-          "ty": "U256"
+          "description": null,
+          "ty": "U256",
+          "optional": false
         }
       ],
       "return_ty": "Unit",
-      "contract_context": true
+      "is_contract_context": true,
+      "access": "public"
     },
     {
       "name": "transfer_from",
+      "description": "Transfer tokens from one account to another",
       "is_mutable": true,
-      "is_payable": false,
-      "args": [
+      "arguments": [
         {
           "name": "owner",
-          "ty": "Key"
+          "description": null,
+          "ty": "Key",
+          "optional": false
         },
         {
           "name": "recipient",
-          "ty": "Key"
+          "description": null,
+          "ty": "Key",
+          "optional": false
         },
         {
           "name": "amount",
-          "ty": "U256"
+          "description": null,
+          "ty": "U256",
+          "optional": false
         }
       ],
       "return_ty": "Unit",
-      "contract_context": true
+      "is_contract_context": true,
+      "access": "public"
     },
     {
       "name": "approve",
+      "description": "Approve spender to use tokens on behalf of the owner",
       "is_mutable": true,
-      "is_payable": false,
-      "args": [
+      "arguments": [
         {
           "name": "spender",
-          "ty": "Key"
+          "description": null,
+          "ty": "Key",
+          "optional": false
         },
         {
           "name": "amount",
-          "ty": "U256"
+          "description": null,
+          "ty": "U256",
+          "optional": false
         }
       ],
       "return_ty": "Unit",
-      "contract_context": true
+      "is_contract_context": true,
+      "access": "public"
     },
     {
       "name": "allowance",
+      "description": "Check the amount of tokens that an owner allowed to a spender",
       "is_mutable": false,
-      "is_payable": false,
-      "args": [
+      "arguments": [
         {
           "name": "owner",
-          "ty": "Key"
+          "description": null,
+          "ty": "Key",
+          "optional": false
         },
         {
           "name": "spender",
-          "ty": "Key"
+          "description": null,
+          "ty": "Key",
+          "optional": false
         }
       ],
       "return_ty": "U256",
-      "contract_context": true
+      "is_contract_context": true,
+      "access": "public"
     },
     {
       "name": "balance_of",
+      "description": "Check the amount of tokens owned by an account",
       "is_mutable": false,
-      "is_payable": false,
-      "args": [
+      "arguments": [
         {
           "name": "owner",
-          "ty": "Key"
+          "description": null,
+          "ty": "Key",
+          "optional": false
         }
       ],
       "return_ty": "U256",
-      "contract_context": true
+      "is_contract_context": true,
+      "access": "public"
     },
     {
       "name": "total_supply",
+      "description": "Check the total supply of tokens",
       "is_mutable": false,
-      "is_payable": false,
-      "args": [],
+      "arguments": [],
       "return_ty": "U256",
-      "contract_context": true
+      "is_contract_context": true,
+      "access": "public"
     }
   ],
   "events": [

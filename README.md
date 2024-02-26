@@ -33,17 +33,29 @@ Root of schema is an object with the following properties:
 - `types` - List of custom types used in `entry_points` and `events`.
 - `entry_points` - List of entry points.
 - `events` - List of events.
+- `call` - Optional section for description of the `call` method. `null` when not
+  present.
 
 ### Types
 Types section is used to defined all the custom defined types in `entry_points`
-and `events`. Custom types can be constructed out of CLTypes and other custom types.
+and `events`. Custom types can be constructed out of CLTypes and other custom
+types.
 
 There are two kinds of types:
 - `struct` - Represents a struct kind of data with a list of named fields.
-- `enum` - Represents an enum type with a list of named variants. There three modes when defining variants:
-    - `single unnnamed field` - variant with a single unnamed field is encoded as is,
-    - `multiple unnamed fields` - variant with multiple unnamed fields are packed into a tuple,
+- `enum` - Represents an enum type with a list of named variants. There three
+  modes when defining variants:
+    - `single unnnamed field` - variant with a single unnamed field is encoded
+      as is,
+    - `multiple unnamed fields` - variant with multiple unnamed fields are
+      packed into a tuple,
     - `named fields` - variant with named fields are encoded as a struct.
+
+Entrypoints, arguments, structs, struct's members and enums have `description`
+filed. It can be a string or `null`.
+
+It is possible to add many arguments with the same name. Then all of them have to
+be marked as `optional`. It's up the contract to decide which one to use.
 
 See [dns_schema.json] for all the examples.
 
@@ -51,16 +63,21 @@ See [dns_schema.json] for all the examples.
 > used here because CLType is implementend already in all SDKs. For 2.0 we might
 > prepare next version that has different type format.
 
+#### Recursive Types
+It is possible to define recursive types in the schema. For example, a linked
+list. It's up to the implemntation to decide how to handle it infinite
+recursion. We recommend to limit the recursion to a reasonable depth.
+
 ### Entry Points
 Entry points are the functions that can be called on the contract. Each entry
 has following properties:
 - `name` - Name of the entry point.
+- `description` - Description of the entry point.
 - `is_mutable` - Whether the entry point is mutable or not.
-- `is_payable` - Whether the entry point is payable or not.
 - `args` - List of named arguments to the entry point.
 - `return_ty` - Return type of the entry point.
-- `contract_context`: If `true` then it is contract context, otherwise session
-  context.
+- `is_contract_context`: If `true` then it is contract context, otherwise
+  session context.
 
 ### Events
 Events are a list of named types. Each event has following properties:
