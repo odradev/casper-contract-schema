@@ -1,6 +1,9 @@
 {
   "casper_contract_schema_version": 1,
   "toolchain": "rustc 1.73.0 (cc66ad468 2023-10-03)",
+  "authors": [],
+  "repository": null,
+  "homepage": null,
   "contract_name": "DNS",
   "contract_version": "0.1.3",
   "types": [
@@ -45,9 +48,15 @@
         "description": "IP address",
         "variants": [
           {
+            "name": "Unknown",
+            "description": null,
+            "discriminant": 0,
+            "ty": "Unit"
+          },
+          {
             "name": "IPv4",
             "description": "IPv4 address",
-            "discriminant": 0,
+            "discriminant": 1,
             "ty": {
               "ByteArray": 4
             }
@@ -55,7 +64,7 @@
           {
             "name": "IPv4WithDescription",
             "description": "IPv4 address with description",
-            "discriminant": 1,
+            "discriminant": 2,
             "ty": {
               "Tuple2": [
                 {
@@ -68,13 +77,13 @@
           {
             "name": "IPv6",
             "description": "IPv6 address",
-            "discriminant": 2,
+            "discriminant": 3,
             "ty": "IP::IPv6"
           },
           {
             "name": "IPv6WithDescription",
             "description": "IPv6 address with description",
-            "discriminant": 3,
+            "discriminant": 4,
             "ty": "IP::IPv6WithDescription"
           }
         ]
@@ -99,6 +108,7 @@
       }
     }
   ],
+  "errors": [],
   "entry_points": [
     {
       "name": "add_record",
@@ -159,5 +169,6 @@
       "name": "event_RecordRemoved",
       "ty": "DNSRecord"
     }
-  ]
+  ],
+  "call": null
 }

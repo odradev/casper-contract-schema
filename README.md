@@ -28,9 +28,13 @@ Following is the rough description of the schema format.
 Root of schema is an object with the following properties:
 - `casper_contract_schema_version` - Version of the schema.
 - `toolchain` - Toolchain used to compile the contract.
+- `authors` - List of authors of the contract.
+- `repository` - optional URL of the repository.
+- `homepage` - optional URL of the project homepage.
 - `contract_name` - Name of the contract.
 - `contract_version` - Version of the contract.
 - `types` - List of custom types used in `entry_points` and `events`.
+- `errors` - List of user-defined errors.
 - `entry_points` - List of entry points.
 - `events` - List of events.
 - `call` - Optional section for description of the `call` method. `null` when not
@@ -45,7 +49,7 @@ There are two kinds of types:
 - `struct` - Represents a struct kind of data with a list of named fields.
 - `enum` - Represents an enum type with a list of named variants. There three
   modes when defining variants:
-    - `single unnnamed field` - variant with a single unnamed field is encoded
+    - `single unnamed field` - variant with a single unnamed field is encoded
       as is,
     - `multiple unnamed fields` - variant with multiple unnamed fields are
       packed into a tuple,
@@ -60,12 +64,12 @@ be marked as `optional`. It's up the contract to decide which one to use.
 See [dns_schema.json] for all the examples.
 
 > Casper 2.0 no longer plans to use the CLType format. Yet it should be still
-> used here because CLType is implementend already in all SDKs. For 2.0 we might
+> used here because CLType is implemented already in all SDKs. For 2.0 we might
 > prepare next version that has different type format.
 
 #### Recursive Types
 It is possible to define recursive types in the schema. For example, a linked
-list. It's up to the implemntation to decide how to handle it infinite
+list. It's up to the implementation to decide how to handle it infinite
 recursion. We recommend to limit the recursion to a reasonable depth.
 
 ### Entry Points
@@ -80,6 +84,12 @@ has following properties:
   session context.
 - `access` - Access control for the entry point. It can be `public` or `group`
   with a list of groups.
+
+### Errors
+Errors are a list of custom errors that the contract may revert with. Each error has following properties:
+- `name` - Name of the error.
+- `description` - Description of the error.
+- `discriminant` - Discriminant of the error.
 
 ### Events
 Events are a list of named types. Each event has following properties:

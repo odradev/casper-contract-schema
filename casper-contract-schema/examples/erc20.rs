@@ -1,5 +1,4 @@
 use casper_contract_schema::*;
-use casper_types::{CLTyped, Key, U256};
 
 pub fn example_erc20_schema() -> ContractSchema {
     ContractSchema {
@@ -7,23 +6,52 @@ pub fn example_erc20_schema() -> ContractSchema {
         toolchain: String::from("rustc 1.73.0 (cc66ad468 2023-10-03)"),
         contract_name: String::from("Erc20"),
         contract_version: String::from("0.1.0"),
+        authors: vec![String::from("John Doe <john@doe.com>")],
+        repository: Some(String::from(
+            "https://github.com/casper-ecosystem/casper-contract-schema",
+        )),
+        homepage: Some(String::from("https://john.doe.com")),
+        errors: vec![
+            UserError {
+                name: String::from("InsufficientFunds"),
+                description: Some(String::from("Insufficient funds")),
+                discriminant: 100u8,
+            },
+            UserError {
+                name: String::from("InsufficientAllowance"),
+                description: Some(String::from("Insufficient allowance")),
+                discriminant: 101u8,
+            },
+        ],
         types: vec![
             CustomType::Struct {
                 name: TypeName::new("Transfer"),
                 description: Some(String::from("Transfer event")),
                 members: vec![
-                    StructMember::cl("from", "Sender of tokens.", Option::<Key>::cl_type()),
-                    StructMember::cl("to", "Recipient of tokens.", Option::<Key>::cl_type()),
-                    StructMember::cl("value", "Transfered amount.", U256::cl_type()),
+                    StructMember::new(
+                        "from",
+                        "Sender of tokens.",
+                        NamedCLType::Option(Box::new(NamedCLType::Key)),
+                    ),
+                    StructMember::new(
+                        "to",
+                        "Recipient of tokens.",
+                        NamedCLType::Option(Box::new(NamedCLType::Key)),
+                    ),
+                    StructMember::new("value", "Transfered amount.", NamedCLType::U256),
                 ],
             },
             CustomType::Struct {
                 name: TypeName::new("Approval"),
                 description: Some(String::from("Approval event")),
                 members: vec![
-                    StructMember::cl("owner", "", Option::<Key>::cl_type()),
-                    StructMember::cl("spender", "", Option::<Key>::cl_type()),
-                    StructMember::cl("value", "", U256::cl_type()),
+                    StructMember::new("owner", "", NamedCLType::Option(Box::new(NamedCLType::Key))),
+                    StructMember::new(
+                        "spender",
+                        "",
+                        NamedCLType::Option(Box::new(NamedCLType::Key)),
+                    ),
+                    StructMember::new("value", "", NamedCLType::U256),
                 ],
             },
         ],
@@ -33,10 +61,10 @@ pub fn example_erc20_schema() -> ContractSchema {
                 description: Some(String::from("Transfer tokens to another account")),
                 is_mutable: true,
                 arguments: vec![
-                    Argument::cl("recipient", "", Key::cl_type()),
-                    Argument::cl("amount", "", U256::cl_type()),
+                    Argument::new("recipient", "", NamedCLType::Key),
+                    Argument::new("amount", "", NamedCLType::U256),
                 ],
-                return_ty: Type::unit(),
+                return_ty: NamedCLType::Unit.into(),
                 is_contract_context: true,
                 access: Access::Public,
             },
@@ -45,11 +73,11 @@ pub fn example_erc20_schema() -> ContractSchema {
                 description: Some(String::from("Transfer tokens from one account to another")),
                 is_mutable: true,
                 arguments: vec![
-                    Argument::cl("owner", "", Key::cl_type()),
-                    Argument::cl("recipient", "", Key::cl_type()),
-                    Argument::cl("amount", "", U256::cl_type()),
+                    Argument::new("owner", "", NamedCLType::Key),
+                    Argument::new("recipient", "", NamedCLType::Key),
+                    Argument::new("amount", "", NamedCLType::U256),
                 ],
-                return_ty: Type::unit(),
+                return_ty: NamedCLType::Unit.into(),
                 is_contract_context: true,
                 access: Access::Public,
             },
@@ -60,10 +88,10 @@ pub fn example_erc20_schema() -> ContractSchema {
                 )),
                 is_mutable: true,
                 arguments: vec![
-                    Argument::cl("spender", "", Key::cl_type()),
-                    Argument::cl("amount", "", U256::cl_type()),
+                    Argument::new("spender", "", NamedCLType::Key),
+                    Argument::new("amount", "", NamedCLType::U256),
                 ],
-                return_ty: Type::unit(),
+                return_ty: NamedCLType::Unit.into(),
                 is_contract_context: true,
                 access: Access::Public,
             },
@@ -74,10 +102,10 @@ pub fn example_erc20_schema() -> ContractSchema {
                 )),
                 is_mutable: false,
                 arguments: vec![
-                    Argument::cl("owner", "", Key::cl_type()),
-                    Argument::cl("spender", "", Key::cl_type()),
+                    Argument::new("owner", "", NamedCLType::Key),
+                    Argument::new("spender", "", NamedCLType::Key),
                 ],
-                return_ty: Type::System(U256::cl_type()),
+                return_ty: NamedCLType::U256.into(),
                 is_contract_context: true,
                 access: Access::Public,
             },
@@ -87,8 +115,8 @@ pub fn example_erc20_schema() -> ContractSchema {
                     "Check the amount of tokens owned by an account",
                 )),
                 is_mutable: false,
-                arguments: vec![Argument::cl("owner", "", Key::cl_type())],
-                return_ty: Type::System(U256::cl_type()),
+                arguments: vec![Argument::new("owner", "", NamedCLType::Key)],
+                return_ty: NamedCLType::U256.into(),
                 is_contract_context: true,
                 access: Access::Public,
             },
@@ -97,7 +125,7 @@ pub fn example_erc20_schema() -> ContractSchema {
                 description: Some(String::from("Check the total supply of tokens")),
                 is_mutable: false,
                 arguments: vec![],
-                return_ty: Type::System(U256::cl_type()),
+                return_ty: NamedCLType::U256.into(),
                 is_contract_context: true,
                 access: Access::Public,
             },
@@ -108,15 +136,15 @@ pub fn example_erc20_schema() -> ContractSchema {
         ],
         call: Some(CallMethod::new(
             "erc20.wasm",
-            "Fungable token",
+            "Fungible token",
             vec![
-                Argument::cl("name", "Name of the token", String::cl_type()),
-                Argument::cl("symbol", "Symbol of the token", String::cl_type()),
-                Argument::cl("decimals", "Number of decimals", u8::cl_type()),
-                Argument::cl(
+                Argument::new("name", "Name of the token", NamedCLType::String),
+                Argument::new("symbol", "Symbol of the token", NamedCLType::String),
+                Argument::new("decimals", "Number of decimals", NamedCLType::U8),
+                Argument::new(
                     "initial_supply",
                     "Initial supply of tokens",
-                    U256::cl_type(),
+                    NamedCLType::U256,
                 ),
             ],
         )),

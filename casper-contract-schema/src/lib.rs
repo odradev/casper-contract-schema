@@ -2,16 +2,29 @@ use casper_types::CLType;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
+mod ty;
+pub use ty::NamedCLType;
+
 #[derive(Serialize, Deserialize, JsonSchema)]
 pub struct ContractSchema {
     pub casper_contract_schema_version: u8,
     pub toolchain: String,
+    pub authors: Vec<String>,
+    pub repository: Option<String>,
+    pub homepage: Option<String>,
     pub contract_name: String,
     pub contract_version: String,
     pub types: Vec<CustomType>,
+    pub errors: Vec<UserError>,
     pub entry_points: Vec<Entrypoint>,
     pub events: Vec<Event>,
     pub call: Option<CallMethod>,
+}
+
+impl ContractSchema {
+    pub fn as_json(&self) -> Option<String> {
+        serde_json::to_string_pretty(self).ok()
+    }
 }
 
 #[derive(Serialize, Deserialize, JsonSchema)]
@@ -25,7 +38,7 @@ pub struct Entrypoint {
     pub access: Access,
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Clone, Serialize, Deserialize, JsonSchema)]
 pub struct Argument {
     pub name: String,
     pub description: Option<String>,
@@ -34,28 +47,21 @@ pub struct Argument {
 }
 
 impl Argument {
-    pub fn cl(name: &str, description: &str, ty: CLType) -> Self {
-        Self::new(name, description, Type::System(ty), false)
-    }
-
-    pub fn opt_cl(name: &str, description: &str, ty: CLType) -> Self {
-        Self::new(name, description, Type::System(ty), true)
-    }
-
-    pub fn custom(name: &str, description: &str, ty: &str) -> Self {
-        Self::new(name, description, Type::Custom(TypeName::new(ty)), false)
-    }
-
-    pub fn opt_custom(name: &str, description: &str, ty: &str) -> Self {
-        Self::new(name, description, Type::Custom(TypeName::new(ty)), true)
-    }
-
-    fn new(name: &str, description: &str, ty: Type, optional: bool) -> Self {
+    pub fn new(name: &str, description: &str, ty: NamedCLType) -> Self {
         Self {
             name: String::from(name),
             description: parse_description(description),
-            ty,
-            optional,
+            ty: ty.into(),
+            optional: false,
+        }
+    }
+
+    pub fn new_opt(name: &str, description: &str, ty: NamedCLType) -> Self {
+        Self {
+            name: String::from(name),
+            description: parse_description(description),
+            ty: ty.into(),
+            optional: true,
         }
     }
 }
@@ -67,7 +73,7 @@ pub enum Access {
     Groups(Vec<String>),
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema)]
 pub struct StructMember {
     pub name: String,
     pub description: Option<String>,
@@ -75,19 +81,11 @@ pub struct StructMember {
 }
 
 impl StructMember {
-    pub fn cl(name: &str, description: &str, ty: CLType) -> Self {
+    pub fn new(name: &str, description: &str, ty: NamedCLType) -> Self {
         Self {
             name: String::from(name),
             description: parse_description(description),
-            ty: Type::System(ty),
-        }
-    }
-
-    pub fn custom(name: &str, description: &str, ty: &str) -> Self {
-        Self {
-            name: String::from(name),
-            description: parse_description(description),
-            ty: Type::Custom(TypeName::new(ty)),
+            ty: ty.into(),
         }
     }
 }
@@ -100,22 +98,56 @@ fn parse_description(description: &str) -> Option<String> {
     }
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
-#[serde(rename_all = "snake_case")]
-#[serde(untagged)]
-pub enum Type {
-    System(CLType),
-    Custom(TypeName),
+#[derive(PartialEq, PartialOrd, Ord, Eq, Clone, Serialize, Deserialize, JsonSchema)]
+pub enum CLType3 {
+    /// `bool` primitive.
+    Bool,
+    /// `i32` primitive.
+    I32,
+    /// `i64` primitive.
+    I64,
+    /// `u8` primitive.
+    U8,
+    /// `u32` primitive.
+    U32,
+    /// `u64` primitive.
+    U64,
+    /// `Option` of a `CLType`.
+    Option(Box<CLType>),
+    /// Variable-length list of a single `CLType` (comparable to a `Vec`).
+    ByteArray(u32),
+    /// `Result` with `Ok` and `Err` variants of `CLType`s.
+    Result {
+        ok: Box<CLType>,
+        err: Box<CLType>,
+    },
+    Any,
 }
 
-impl Type {
-    pub fn unit() -> Self {
-        Self::System(CLType::Unit)
+#[derive(PartialEq, PartialOrd, Ord, Eq, Clone, Serialize, Deserialize, JsonSchema)]
+#[serde(rename_all = "snake_case")]
+pub struct Type(pub NamedCLType);
+
+impl From<NamedCLType> for Type {
+    fn from(cl_type: NamedCLType) -> Self {
+        Self(cl_type)
     }
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(PartialEq, PartialOrd, Ord, Eq, Clone, Serialize, Deserialize, JsonSchema)]
 pub struct TypeName(pub String);
+
+impl From<&str> for TypeName {
+    fn from(name: &str) -> Self {
+        Self(String::from(name))
+    }
+}
+
+impl From<String> for TypeName {
+    fn from(name: String) -> Self {
+        Self(name)
+    }
+}
 
 impl TypeName {
     pub fn new(name: &str) -> Self {
@@ -123,7 +155,7 @@ impl TypeName {
     }
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub enum CustomType {
     Struct {
@@ -138,7 +170,7 @@ pub enum CustomType {
     },
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema)]
 pub struct EnumVariant {
     pub name: String,
     pub description: Option<String>,
@@ -156,7 +188,24 @@ impl Event {
     pub fn new(name: &str, ty: &str) -> Self {
         Self {
             name: String::from(name),
-            ty: TypeName(String::from(ty)),
+            ty: ty.into(),
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, JsonSchema)]
+pub struct UserError {
+    pub name: String,
+    pub description: Option<String>,
+    pub discriminant: u8,
+}
+
+impl UserError {
+    pub fn new(name: &str, desc: &str, discriminant: u8) -> Self {
+        Self {
+            name: String::from(name),
+            description: parse_description(desc),
+            discriminant,
         }
     }
 }

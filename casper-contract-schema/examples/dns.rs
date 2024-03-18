@@ -1,14 +1,14 @@
 use casper_contract_schema::{
-    Access, Argument, ContractSchema, CustomType, Entrypoint, EnumVariant, Event, StructMember,
-    Type, TypeName,
+    Access, Argument, ContractSchema, CustomType, Entrypoint, EnumVariant, Event, NamedCLType,
+    StructMember, TypeName,
 };
-use casper_types::CLTyped;
 
 type IPv4 = [u8; 4];
 type IPv6 = [u8; 16];
 
 #[allow(dead_code)]
 enum IP {
+    Unknown,                                               // no data,
     IPv4(IPv4),                                            // single unnamed element,
     IPv4WithDescription(IPv4, String),                     // multiple unnamed elements,
     IPv6 { ip: IPv6 },                                     // single named element,
@@ -21,18 +21,22 @@ fn enum_example_schema() -> ContractSchema {
         toolchain: String::from("rustc 1.73.0 (cc66ad468 2023-10-03)"),
         contract_name: String::from("DNS"),
         contract_version: String::from("0.1.3"),
+        authors: vec![],
+        repository: None,
+        homepage: None,
+        errors: vec![],
         types: vec![
             CustomType::Struct {
                 name: TypeName::new("IP::IPv6"),
                 description: None,
-                members: vec![StructMember::cl("ip", "", IPv6::cl_type())],
+                members: vec![StructMember::new("ip", "", NamedCLType::ByteArray(16))],
             },
             CustomType::Struct {
                 name: TypeName::new("IP::IPv6WithDescription"),
                 description: None,
                 members: vec![
-                    StructMember::cl("ip", "", IPv6::cl_type()),
-                    StructMember::cl("description", "", String::cl_type()),
+                    StructMember::new("ip", "", NamedCLType::ByteArray(16)),
+                    StructMember::new("description", "", NamedCLType::String),
                 ],
             },
             CustomType::Enum {
@@ -40,28 +44,38 @@ fn enum_example_schema() -> ContractSchema {
                 description: Some(String::from("IP address")),
                 variants: vec![
                     EnumVariant {
+                        name: String::from("Unknown"),
+                        description: None,
+                        discriminant: 0,
+                        ty: NamedCLType::Unit.into(),
+                    },
+                    EnumVariant {
                         name: String::from("IPv4"),
                         description: Some(String::from("IPv4 address")),
-                        discriminant: 0,
-                        ty: Type::System(IPv4::cl_type()),
+                        discriminant: 1,
+                        ty: NamedCLType::ByteArray(4).into(),
                     },
                     EnumVariant {
                         name: String::from("IPv4WithDescription"),
                         description: Some(String::from("IPv4 address with description")),
-                        discriminant: 1,
-                        ty: Type::System(<(IPv4, String)>::cl_type()),
+                        discriminant: 2,
+                        ty: NamedCLType::Tuple2([
+                            Box::new(NamedCLType::ByteArray(4)),
+                            Box::new(NamedCLType::String),
+                        ])
+                        .into(),
                     },
                     EnumVariant {
                         name: String::from("IPv6"),
                         description: Some(String::from("IPv6 address")),
-                        discriminant: 2,
-                        ty: Type::Custom(TypeName::new("IP::IPv6")),
+                        discriminant: 3,
+                        ty: NamedCLType::Custom("IP::IPv6".to_owned()).into(),
                     },
                     EnumVariant {
                         name: String::from("IPv6WithDescription"),
                         description: Some(String::from("IPv6 address with description")),
-                        discriminant: 3,
-                        ty: Type::Custom(TypeName::new("IP::IPv6WithDescription")),
+                        discriminant: 4,
+                        ty: NamedCLType::Custom("IP::IPv6WithDescription".to_owned()).into(),
                     },
                 ],
             },
@@ -69,8 +83,8 @@ fn enum_example_schema() -> ContractSchema {
                 name: TypeName::new("DNSRecord"),
                 description: Some(String::from("DNS record")),
                 members: vec![
-                    StructMember::cl("name", "Domain name", String::cl_type()),
-                    StructMember::custom("ip", "", "IP"),
+                    StructMember::new("name", "Domain name", NamedCLType::String),
+                    StructMember::new("ip", "", NamedCLType::Custom("IP".to_owned())),
                 ],
             },
         ],
@@ -80,10 +94,10 @@ fn enum_example_schema() -> ContractSchema {
                 description: None,
                 is_mutable: true,
                 arguments: vec![
-                    Argument::cl("name", "", String::cl_type()),
-                    Argument::custom("ip", "", "IP"),
+                    Argument::new("name", "", NamedCLType::String),
+                    Argument::new("ip", "", NamedCLType::Custom("IP".to_owned())),
                 ],
-                return_ty: Type::unit(),
+                return_ty: NamedCLType::Unit.into(),
                 is_contract_context: true,
                 access: Access::Public,
             },
@@ -92,10 +106,10 @@ fn enum_example_schema() -> ContractSchema {
                 description: Some(String::from("Remove a DNS record")),
                 is_mutable: true,
                 arguments: vec![
-                    Argument::cl("name", "", String::cl_type()),
-                    Argument::custom("ip", "", "IP"),
+                    Argument::new("name", "", NamedCLType::String),
+                    Argument::new("ip", "", NamedCLType::Custom("IP".to_owned())),
                 ],
-                return_ty: Type::unit(),
+                return_ty: NamedCLType::Unit.into(),
                 is_contract_context: true,
                 access: Access::Groups(vec![String::from("admin"), String::from("moderator")]),
             },
