@@ -174,7 +174,7 @@ pub enum CustomType {
 pub struct EnumVariant {
     pub name: String,
     pub description: Option<String>,
-    pub discriminant: u8,
+    pub discriminant: u16,
     pub ty: Type,
 }
 
