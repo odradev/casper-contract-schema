@@ -197,11 +197,11 @@ impl Event {
 pub struct UserError {
     pub name: String,
     pub description: Option<String>,
-    pub discriminant: u8,
+    pub discriminant: u16,
 }
 
 impl UserError {
-    pub fn new(name: &str, desc: &str, discriminant: u8) -> Self {
+    pub fn new(name: &str, desc: &str, discriminant: u16) -> Self {
         Self {
             name: String::from(name),
             description: parse_description(desc),

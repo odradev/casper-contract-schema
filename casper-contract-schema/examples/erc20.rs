@@ -15,12 +15,12 @@ pub fn example_erc20_schema() -> ContractSchema {
             UserError {
                 name: String::from("InsufficientFunds"),
                 description: Some(String::from("Insufficient funds")),
-                discriminant: 100u8,
+                discriminant: 100u16,
             },
             UserError {
                 name: String::from("InsufficientAllowance"),
                 description: Some(String::from("Insufficient allowance")),
-                discriminant: 101u8,
+                discriminant: 101u16,
             },
         ],
         types: vec![
