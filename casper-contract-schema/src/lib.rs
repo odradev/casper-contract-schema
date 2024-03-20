@@ -1,4 +1,3 @@
-use casper_types::CLType;
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -99,32 +98,6 @@ fn parse_description(description: &str) -> Option<String> {
 }
 
 #[derive(PartialEq, PartialOrd, Ord, Eq, Clone, Serialize, Deserialize, JsonSchema)]
-pub enum CLType3 {
-    /// `bool` primitive.
-    Bool,
-    /// `i32` primitive.
-    I32,
-    /// `i64` primitive.
-    I64,
-    /// `u8` primitive.
-    U8,
-    /// `u32` primitive.
-    U32,
-    /// `u64` primitive.
-    U64,
-    /// `Option` of a `CLType`.
-    Option(Box<CLType>),
-    /// Variable-length list of a single `CLType` (comparable to a `Vec`).
-    ByteArray(u32),
-    /// `Result` with `Ok` and `Err` variants of `CLType`s.
-    Result {
-        ok: Box<CLType>,
-        err: Box<CLType>,
-    },
-    Any,
-}
-
-#[derive(PartialEq, PartialOrd, Ord, Eq, Clone, Serialize, Deserialize, JsonSchema)]
 #[serde(rename_all = "snake_case")]
 pub struct Type(pub NamedCLType);
 
@@ -178,7 +151,7 @@ pub struct EnumVariant {
     pub ty: Type,
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema)]
 pub struct Event {
     pub name: String,
     pub ty: TypeName,
@@ -193,7 +166,7 @@ impl Event {
     }
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema)]
 pub struct UserError {
     pub name: String,
     pub description: Option<String>,
