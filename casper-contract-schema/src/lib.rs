@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 mod ty;
 pub use ty::NamedCLType;
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Serialize, Deserialize, JsonSchema, Debug)]
 pub struct ContractSchema {
     pub casper_contract_schema_version: u8,
     pub toolchain: String,
@@ -26,7 +26,7 @@ impl ContractSchema {
     }
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Serialize, Deserialize, JsonSchema, Debug)]
 pub struct Entrypoint {
     pub name: String,
     pub description: Option<String>,
@@ -37,7 +37,7 @@ pub struct Entrypoint {
     pub access: Access,
 }
 
-#[derive(Clone, Serialize, Deserialize, JsonSchema)]
+#[derive(Clone, Serialize, Deserialize, JsonSchema, Debug)]
 pub struct Argument {
     pub name: String,
     pub description: Option<String>,
@@ -65,14 +65,14 @@ impl Argument {
     }
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Serialize, Deserialize, JsonSchema, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum Access {
     Public,
     Groups(Vec<String>),
 }
 
-#[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema)]
+#[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema, Debug)]
 pub struct StructMember {
     pub name: String,
     pub description: Option<String>,
@@ -97,7 +97,7 @@ fn parse_description(description: &str) -> Option<String> {
     }
 }
 
-#[derive(PartialEq, PartialOrd, Ord, Eq, Clone, Serialize, Deserialize, JsonSchema)]
+#[derive(PartialEq, PartialOrd, Ord, Eq, Clone, Serialize, Deserialize, JsonSchema, Debug)]
 #[serde(rename_all = "snake_case")]
 pub struct Type(pub NamedCLType);
 
@@ -107,7 +107,7 @@ impl From<NamedCLType> for Type {
     }
 }
 
-#[derive(PartialEq, PartialOrd, Ord, Eq, Clone, Serialize, Deserialize, JsonSchema)]
+#[derive(PartialEq, PartialOrd, Ord, Eq, Clone, Serialize, Deserialize, JsonSchema, Debug)]
 pub struct TypeName(pub String);
 
 impl From<&str> for TypeName {
@@ -128,7 +128,7 @@ impl TypeName {
     }
 }
 
-#[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema)]
+#[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum CustomType {
     Struct {
@@ -143,7 +143,7 @@ pub enum CustomType {
     },
 }
 
-#[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema)]
+#[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema, Debug)]
 pub struct EnumVariant {
     pub name: String,
     pub description: Option<String>,
@@ -151,7 +151,7 @@ pub struct EnumVariant {
     pub ty: Type,
 }
 
-#[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema)]
+#[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema, Debug)]
 pub struct Event {
     pub name: String,
     pub ty: TypeName,
@@ -166,7 +166,7 @@ impl Event {
     }
 }
 
-#[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema)]
+#[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema, Debug)]
 pub struct UserError {
     pub name: String,
     pub description: Option<String>,
@@ -183,7 +183,7 @@ impl UserError {
     }
 }
 
-#[derive(Serialize, Deserialize, JsonSchema)]
+#[derive(Serialize, Deserialize, JsonSchema, Debug)]
 pub struct CallMethod {
     pub wasm_file_name: String,
     pub description: Option<String>,

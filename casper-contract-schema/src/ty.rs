@@ -4,7 +4,7 @@ use serde::{
     Deserialize,
 };
 
-#[derive(PartialEq, PartialOrd, Ord, Eq, Clone, Deserialize, JsonSchema)]
+#[derive(PartialEq, PartialOrd, Ord, Eq, Clone, Deserialize, JsonSchema, Debug)]
 pub enum NamedCLType {
     Bool,
     I32,
