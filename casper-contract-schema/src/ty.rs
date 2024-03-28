@@ -4,6 +4,9 @@ use serde::{
     Deserialize,
 };
 
+/// CLType representation. It is slight extension of the original CLType enum.
+/// Instead of `Any` variant, it uses `Custom` variant to represent custom
+/// types, that can have name.
 #[derive(PartialEq, PartialOrd, Ord, Eq, Clone, Deserialize, JsonSchema, Debug)]
 pub enum NamedCLType {
     Bool,

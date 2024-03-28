@@ -1,9 +1,12 @@
+//! Data structure for representing a Casper Contract Schema.
+
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
 mod ty;
 pub use ty::NamedCLType;
 
+/// Contract definition.
 #[derive(Serialize, Deserialize, JsonSchema, Debug)]
 pub struct ContractSchema {
     pub casper_contract_schema_version: u8,
@@ -21,11 +24,13 @@ pub struct ContractSchema {
 }
 
 impl ContractSchema {
+    /// Returns the JSON representation of the contract schema.
     pub fn as_json(&self) -> Option<String> {
         serde_json::to_string_pretty(self).ok()
     }
 }
 
+/// Entrypoint definition.
 #[derive(Serialize, Deserialize, JsonSchema, Debug)]
 pub struct Entrypoint {
     pub name: String,
@@ -37,6 +42,7 @@ pub struct Entrypoint {
     pub access: Access,
 }
 
+/// Entrypoint's argument definition.
 #[derive(Clone, Serialize, Deserialize, JsonSchema, Debug)]
 pub struct Argument {
     pub name: String,
@@ -65,6 +71,7 @@ impl Argument {
     }
 }
 
+/// Access control definition.
 #[derive(Serialize, Deserialize, JsonSchema, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum Access {
@@ -72,6 +79,7 @@ pub enum Access {
     Groups(Vec<String>),
 }
 
+/// Struct member definition.
 #[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema, Debug)]
 pub struct StructMember {
     pub name: String,
@@ -80,6 +88,7 @@ pub struct StructMember {
 }
 
 impl StructMember {
+    /// Creates a new struct member.
     pub fn new(name: &str, description: &str, ty: NamedCLType) -> Self {
         Self {
             name: String::from(name),
@@ -97,6 +106,7 @@ fn parse_description(description: &str) -> Option<String> {
     }
 }
 
+/// Type definition.
 #[derive(PartialEq, PartialOrd, Ord, Eq, Clone, Serialize, Deserialize, JsonSchema, Debug)]
 #[serde(rename_all = "snake_case")]
 pub struct Type(pub NamedCLType);
@@ -107,6 +117,7 @@ impl From<NamedCLType> for Type {
     }
 }
 
+/// Custom type name definition.
 #[derive(PartialEq, PartialOrd, Ord, Eq, Clone, Serialize, Deserialize, JsonSchema, Debug)]
 pub struct TypeName(pub String);
 
@@ -123,11 +134,13 @@ impl From<String> for TypeName {
 }
 
 impl TypeName {
+    /// Creates a new type name.
     pub fn new(name: &str) -> Self {
         Self(String::from(name))
     }
 }
 
+/// Custom type definition. It covers structs and enums.
 #[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema, Debug)]
 #[serde(rename_all = "snake_case")]
 pub enum CustomType {
@@ -143,6 +156,7 @@ pub enum CustomType {
     },
 }
 
+/// Enum variant definition.
 #[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema, Debug)]
 pub struct EnumVariant {
     pub name: String,
@@ -151,6 +165,7 @@ pub struct EnumVariant {
     pub ty: Type,
 }
 
+/// Event definition.
 #[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema, Debug)]
 pub struct Event {
     pub name: String,
@@ -158,6 +173,7 @@ pub struct Event {
 }
 
 impl Event {
+    /// Creates a new event.
     pub fn new(name: &str, ty: &str) -> Self {
         Self {
             name: String::from(name),
@@ -166,6 +182,7 @@ impl Event {
     }
 }
 
+/// User error definition.
 #[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema, Debug)]
 pub struct UserError {
     pub name: String,
@@ -174,6 +191,7 @@ pub struct UserError {
 }
 
 impl UserError {
+    /// Creates a new user error variant.
     pub fn new(name: &str, desc: &str, discriminant: u16) -> Self {
         Self {
             name: String::from(name),
@@ -183,6 +201,7 @@ impl UserError {
     }
 }
 
+/// Call method definition.
 #[derive(Serialize, Deserialize, JsonSchema, Debug)]
 pub struct CallMethod {
     pub wasm_file_name: String,
@@ -191,6 +210,7 @@ pub struct CallMethod {
 }
 
 impl CallMethod {
+    /// Creates a new call method definition.
     pub fn new(wasm_file_name: &str, description: &str, arguments: Vec<Argument>) -> Self {
         Self {
             wasm_file_name: String::from(wasm_file_name),
