@@ -1,7 +1,12 @@
 [package]
 name = "casper-contract-schema"
+description = "Data structures for the Casper Contract Schema."
 version = "0.1.0"
 edition = "2021"
+authors = ["Krzysztof Pobiarżyn <krzysztof@odra.dev>", "Maciej Zieliński <maciej@odra.dev>"]
+license = "MIT"
+homepage = "https://github.com/odradev/casper-contract-schema"
+repository = "https://github.com/odradev/casper-contract-schema"
 
 [dependencies]
 casper-types = { version = "3.0.0", features = ["json-schema"] }

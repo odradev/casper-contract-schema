@@ -1,4 +1,4 @@
-//! Data structure for representing a Casper Contract Schema.
+//! Data structures for the Casper Contract Schema.
 
 use schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
