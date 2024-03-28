@@ -1,2 +1,3 @@
-casper-contract-schema/target
-casper-contract-schema/Cargo.lock
+target
+Cargo.lock
+.DS_Store
