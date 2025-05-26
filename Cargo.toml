@@ -9,7 +9,7 @@ homepage = "https://github.com/odradev/casper-contract-schema"
 repository = "https://github.com/odradev/casper-contract-schema"
 
 [dependencies]
-casper-types = "5"
+casper-types = "6"
 schemars = "0.8.18"
 serde = { version = "1.0.190", features = ["serde_derive"] }
 serde_json = "1.0.108"
