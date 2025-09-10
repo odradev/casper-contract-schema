@@ -80,7 +80,9 @@ pub enum Access {
 }
 
 /// Struct member definition.
-#[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema, Debug)]
+#[derive(
+    PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema, Debug, Clone, Hash,
+)]
 pub struct StructMember {
     pub name: String,
     pub description: Option<String>,
@@ -107,7 +109,9 @@ fn parse_description(description: &str) -> Option<String> {
 }
 
 /// Type definition.
-#[derive(PartialEq, PartialOrd, Ord, Eq, Clone, Serialize, Deserialize, JsonSchema, Debug)]
+#[derive(
+    PartialEq, PartialOrd, Ord, Eq, Clone, Serialize, Deserialize, JsonSchema, Debug, Hash,
+)]
 #[serde(rename_all = "snake_case")]
 pub struct Type(pub NamedCLType);
 
@@ -118,7 +122,9 @@ impl From<NamedCLType> for Type {
 }
 
 /// Custom type name definition.
-#[derive(PartialEq, PartialOrd, Ord, Eq, Clone, Serialize, Deserialize, JsonSchema, Debug)]
+#[derive(
+    PartialEq, PartialOrd, Ord, Eq, Clone, Serialize, Deserialize, JsonSchema, Debug, Hash,
+)]
 pub struct TypeName(pub String);
 
 impl From<&str> for TypeName {
@@ -141,7 +147,9 @@ impl TypeName {
 }
 
 /// Custom type definition. It covers structs and enums.
-#[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema, Debug)]
+#[derive(
+    PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema, Debug, Clone, Hash,
+)]
 #[serde(rename_all = "snake_case")]
 pub enum CustomType {
     Struct {
@@ -156,8 +164,20 @@ pub enum CustomType {
     },
 }
 
+impl CustomType {
+    /// Returns the name of the custom type.
+    pub fn name(&self) -> String {
+        match self {
+            CustomType::Struct { name, .. } => name.0.clone(),
+            CustomType::Enum { name, .. } => name.0.clone(),
+        }
+    }
+}
+
 /// Enum variant definition.
-#[derive(PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema, Debug)]
+#[derive(
+    PartialEq, PartialOrd, Ord, Eq, Serialize, Deserialize, JsonSchema, Debug, Clone, Hash,
+)]
 pub struct EnumVariant {
     pub name: String,
     pub description: Option<String>,
