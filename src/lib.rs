@@ -40,6 +40,7 @@ pub struct Entrypoint {
     pub return_ty: Type,
     pub is_contract_context: bool,
     pub access: Access,
+    pub is_payable: bool,
 }
 
 /// Entrypoint's argument definition.
