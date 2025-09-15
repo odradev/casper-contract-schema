@@ -100,7 +100,6 @@ fn enum_example_schema() -> ContractSchema {
                 return_ty: NamedCLType::Unit.into(),
                 is_contract_context: true,
                 access: Access::Public,
-                is_payable: false,
             },
             Entrypoint {
                 name: String::from("remove_record"),
@@ -113,7 +112,6 @@ fn enum_example_schema() -> ContractSchema {
                 return_ty: NamedCLType::Unit.into(),
                 is_contract_context: true,
                 access: Access::Groups(vec![String::from("admin"), String::from("moderator")]),
-                is_payable: false,
             },
         ],
         events: vec![

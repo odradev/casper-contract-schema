@@ -67,7 +67,6 @@ pub fn example_erc20_schema() -> ContractSchema {
                 return_ty: NamedCLType::Unit.into(),
                 is_contract_context: true,
                 access: Access::Public,
-                is_payable: false,
             },
             Entrypoint {
                 name: String::from("transfer_from"),
@@ -81,7 +80,6 @@ pub fn example_erc20_schema() -> ContractSchema {
                 return_ty: NamedCLType::Unit.into(),
                 is_contract_context: true,
                 access: Access::Public,
-                is_payable: false,
             },
             Entrypoint {
                 name: String::from("approve"),
@@ -96,7 +94,6 @@ pub fn example_erc20_schema() -> ContractSchema {
                 return_ty: NamedCLType::Unit.into(),
                 is_contract_context: true,
                 access: Access::Public,
-                is_payable: false,
             },
             Entrypoint {
                 name: String::from("allowance"),
@@ -111,7 +108,6 @@ pub fn example_erc20_schema() -> ContractSchema {
                 return_ty: NamedCLType::U256.into(),
                 is_contract_context: true,
                 access: Access::Public,
-                is_payable: false,
             },
             Entrypoint {
                 name: String::from("balance_of"),
@@ -123,7 +119,6 @@ pub fn example_erc20_schema() -> ContractSchema {
                 return_ty: NamedCLType::U256.into(),
                 is_contract_context: true,
                 access: Access::Public,
-                is_payable: false,
             },
             Entrypoint {
                 name: String::from("total_supply"),
@@ -133,7 +128,6 @@ pub fn example_erc20_schema() -> ContractSchema {
                 return_ty: NamedCLType::U256.into(),
                 is_contract_context: true,
                 access: Access::Public,
-                is_payable: false,
             },
         ],
         events: vec![
