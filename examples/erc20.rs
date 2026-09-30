@@ -4,6 +4,10 @@ pub fn example_erc20_schema() -> ContractSchema {
     ContractSchema {
         casper_contract_schema_version: 1,
         toolchain: String::from("rustc 1.73.0 (cc66ad468 2023-10-03)"),
+        toolkit: Toolkit {
+            name: "Odra".to_string(),
+            version: "2.9.0".to_string(),
+        },
         contract_name: String::from("Erc20"),
         contract_version: String::from("0.1.0"),
         authors: vec![String::from("John Doe <john@doe.com>")],
@@ -60,6 +64,7 @@ pub fn example_erc20_schema() -> ContractSchema {
                 name: String::from("transfer"),
                 description: Some(String::from("Transfer tokens to another account")),
                 is_mutable: true,
+                is_payable: false,
                 arguments: vec![
                     Argument::new("recipient", "", NamedCLType::Key),
                     Argument::new("amount", "", NamedCLType::U256),
@@ -72,6 +77,7 @@ pub fn example_erc20_schema() -> ContractSchema {
                 name: String::from("transfer_from"),
                 description: Some(String::from("Transfer tokens from one account to another")),
                 is_mutable: true,
+                is_payable: false,
                 arguments: vec![
                     Argument::new("owner", "", NamedCLType::Key),
                     Argument::new("recipient", "", NamedCLType::Key),
@@ -87,6 +93,7 @@ pub fn example_erc20_schema() -> ContractSchema {
                     "Approve spender to use tokens on behalf of the owner",
                 )),
                 is_mutable: true,
+                is_payable: false,
                 arguments: vec![
                     Argument::new("spender", "", NamedCLType::Key),
                     Argument::new("amount", "", NamedCLType::U256),
@@ -101,6 +108,7 @@ pub fn example_erc20_schema() -> ContractSchema {
                     "Check the amount of tokens that an owner allowed to a spender",
                 )),
                 is_mutable: false,
+                is_payable: false,
                 arguments: vec![
                     Argument::new("owner", "", NamedCLType::Key),
                     Argument::new("spender", "", NamedCLType::Key),
@@ -115,6 +123,7 @@ pub fn example_erc20_schema() -> ContractSchema {
                     "Check the amount of tokens owned by an account",
                 )),
                 is_mutable: false,
+                is_payable: false,
                 arguments: vec![Argument::new("owner", "", NamedCLType::Key)],
                 return_ty: NamedCLType::U256.into(),
                 is_contract_context: true,
@@ -124,6 +133,7 @@ pub fn example_erc20_schema() -> ContractSchema {
                 name: String::from("total_supply"),
                 description: Some(String::from("Check the total supply of tokens")),
                 is_mutable: false,
+                is_payable: false,
                 arguments: vec![],
                 return_ty: NamedCLType::U256.into(),
                 is_contract_context: true,
