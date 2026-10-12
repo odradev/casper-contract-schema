@@ -1,6 +1,10 @@
 {
   "casper_contract_schema_version": 1,
   "toolchain": "rustc 1.73.0 (cc66ad468 2023-10-03)",
+  "toolkit": {
+    "name": "Odra",
+    "version": "2.9.0"
+  },
   "authors": [
     "John Doe <john@doe.com>"
   ],
@@ -81,6 +85,7 @@
       "name": "transfer",
       "description": "Transfer tokens to another account",
       "is_mutable": true,
+      "is_payable": false,
       "arguments": [
         {
           "name": "recipient",
@@ -103,6 +108,7 @@
       "name": "transfer_from",
       "description": "Transfer tokens from one account to another",
       "is_mutable": true,
+      "is_payable": false,
       "arguments": [
         {
           "name": "owner",
@@ -131,6 +137,7 @@
       "name": "approve",
       "description": "Approve spender to use tokens on behalf of the owner",
       "is_mutable": true,
+      "is_payable": false,
       "arguments": [
         {
           "name": "spender",
@@ -153,6 +160,7 @@
       "name": "allowance",
       "description": "Check the amount of tokens that an owner allowed to a spender",
       "is_mutable": false,
+      "is_payable": false,
       "arguments": [
         {
           "name": "owner",
@@ -175,6 +183,7 @@
       "name": "balance_of",
       "description": "Check the amount of tokens owned by an account",
       "is_mutable": false,
+      "is_payable": false,
       "arguments": [
         {
           "name": "owner",
@@ -191,6 +200,7 @@
       "name": "total_supply",
       "description": "Check the total supply of tokens",
       "is_mutable": false,
+      "is_payable": false,
       "arguments": [],
       "return_ty": "U256",
       "is_contract_context": true,

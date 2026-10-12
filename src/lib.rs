@@ -11,6 +11,7 @@ pub use ty::NamedCLType;
 pub struct ContractSchema {
     pub casper_contract_schema_version: u8,
     pub toolchain: String,
+    pub toolkit: Toolkit,
     pub authors: Vec<String>,
     pub repository: Option<String>,
     pub homepage: Option<String>,
@@ -30,12 +31,20 @@ impl ContractSchema {
     }
 }
 
+/// Toolkit definition.
+#[derive(Serialize, Deserialize, JsonSchema, Debug)]
+pub struct Toolkit {
+    pub name: String,
+    pub version: String,
+}
+
 /// Entrypoint definition.
 #[derive(Serialize, Deserialize, JsonSchema, Debug)]
 pub struct Entrypoint {
     pub name: String,
     pub description: Option<String>,
     pub is_mutable: bool,
+    pub is_payable: bool,
     pub arguments: Vec<Argument>,
     pub return_ty: Type,
     pub is_contract_context: bool,
