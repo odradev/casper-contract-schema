@@ -1,6 +1,10 @@
 {
   "casper_contract_schema_version": 1,
   "toolchain": "rustc 1.73.0 (cc66ad468 2023-10-03)",
+  "toolkit": {
+    "name": "Odra",
+    "version": "2.9.0"
+  },
   "authors": [],
   "repository": null,
   "homepage": null,
@@ -114,6 +118,7 @@
       "name": "add_record",
       "description": null,
       "is_mutable": true,
+      "is_payable": true,
       "arguments": [
         {
           "name": "name",
@@ -136,6 +141,7 @@
       "name": "remove_record",
       "description": "Remove a DNS record",
       "is_mutable": true,
+      "is_payable": false,
       "arguments": [
         {
           "name": "name",

@@ -1,6 +1,6 @@
 use casper_contract_schema::{
     Access, Argument, ContractSchema, CustomType, Entrypoint, EnumVariant, Event, NamedCLType,
-    StructMember, TypeName,
+    StructMember, Toolkit, TypeName,
 };
 
 type IPv4 = [u8; 4];
@@ -19,6 +19,10 @@ fn enum_example_schema() -> ContractSchema {
     ContractSchema {
         casper_contract_schema_version: 1,
         toolchain: String::from("rustc 1.73.0 (cc66ad468 2023-10-03)"),
+        toolkit: Toolkit {
+            name: "Odra".to_string(),
+            version: "2.9.0".to_string(),
+        },
         contract_name: String::from("DNS"),
         contract_version: String::from("0.1.3"),
         authors: vec![],
@@ -93,6 +97,7 @@ fn enum_example_schema() -> ContractSchema {
                 name: String::from("add_record"),
                 description: None,
                 is_mutable: true,
+                is_payable: true,
                 arguments: vec![
                     Argument::new("name", "", NamedCLType::String),
                     Argument::new("ip", "", NamedCLType::Custom("IP".to_owned())),
@@ -105,6 +110,7 @@ fn enum_example_schema() -> ContractSchema {
                 name: String::from("remove_record"),
                 description: Some(String::from("Remove a DNS record")),
                 is_mutable: true,
+                is_payable: false,
                 arguments: vec![
                     Argument::new("name", "", NamedCLType::String),
                     Argument::new("ip", "", NamedCLType::Custom("IP".to_owned())),
