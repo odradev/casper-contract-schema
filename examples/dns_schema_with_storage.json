@@ -1,0 +1,223 @@
+{
+  "casper_contract_schema_version": 1,
+  "toolchain": "rustc 1.73.0 (cc66ad468 2023-10-03)",
+  "toolkit": {
+    "name": "Odra",
+    "version": "2.9.0"
+  },
+  "authors": [],
+  "repository": null,
+  "homepage": null,
+  "contract_name": "DNS",
+  "contract_version": "0.1.3",
+  "types": [
+    {
+      "struct": {
+        "name": "IP::IPv6",
+        "description": null,
+        "members": [
+          {
+            "name": "ip",
+            "description": null,
+            "ty": {
+              "ByteArray": 16
+            }
+          }
+        ]
+      }
+    },
+    {
+      "struct": {
+        "name": "IP::IPv6WithDescription",
+        "description": null,
+        "members": [
+          {
+            "name": "ip",
+            "description": null,
+            "ty": {
+              "ByteArray": 16
+            }
+          },
+          {
+            "name": "description",
+            "description": null,
+            "ty": "String"
+          }
+        ]
+      }
+    },
+    {
+      "enum": {
+        "name": "IP",
+        "description": "IP address",
+        "variants": [
+          {
+            "name": "Unknown",
+            "description": null,
+            "discriminant": 0,
+            "ty": "Unit"
+          },
+          {
+            "name": "IPv4",
+            "description": "IPv4 address",
+            "discriminant": 1,
+            "ty": {
+              "ByteArray": 4
+            }
+          },
+          {
+            "name": "IPv4WithDescription",
+            "description": "IPv4 address with description",
+            "discriminant": 2,
+            "ty": {
+              "Tuple2": [
+                {
+                  "ByteArray": 4
+                },
+                "String"
+              ]
+            }
+          },
+          {
+            "name": "IPv6",
+            "description": "IPv6 address",
+            "discriminant": 3,
+            "ty": "IP::IPv6"
+          },
+          {
+            "name": "IPv6WithDescription",
+            "description": "IPv6 address with description",
+            "discriminant": 4,
+            "ty": "IP::IPv6WithDescription"
+          }
+        ]
+      }
+    },
+    {
+      "struct": {
+        "name": "DNSRecord",
+        "description": "DNS record",
+        "members": [
+          {
+            "name": "name",
+            "description": "Domain name",
+            "ty": "String"
+          },
+          {
+            "name": "ip",
+            "description": null,
+            "ty": "IP"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [],
+  "entry_points": [
+    {
+      "name": "add_record",
+      "description": null,
+      "is_mutable": true,
+      "is_payable": true,
+      "arguments": [
+        {
+          "name": "name",
+          "description": null,
+          "ty": "String",
+          "optional": false
+        },
+        {
+          "name": "ip",
+          "description": null,
+          "ty": "IP",
+          "optional": false
+        }
+      ],
+      "return_ty": "Unit",
+      "is_contract_context": true,
+      "access": "public"
+    },
+    {
+      "name": "remove_record",
+      "description": "Remove a DNS record",
+      "is_mutable": true,
+      "is_payable": false,
+      "arguments": [
+        {
+          "name": "name",
+          "description": null,
+          "ty": "String",
+          "optional": false
+        },
+        {
+          "name": "ip",
+          "description": null,
+          "ty": "IP",
+          "optional": false
+        }
+      ],
+      "return_ty": "Unit",
+      "is_contract_context": true,
+      "access": {
+        "groups": [
+          "admin",
+          "moderator"
+        ]
+      }
+    }
+  ],
+  "events": [
+    {
+      "name": "event_RecordAdded",
+      "ty": "DNSRecord"
+    },
+    {
+      "name": "event_RecordRemoved",
+      "ty": "DNSRecord"
+    }
+  ],
+  "call": null,
+  "storage": {
+    "kind": "module",
+    "fields": [
+      {
+        "name": "records",
+        "index": 1,
+        "kind": "mapping",
+        "key": "String",
+        "value": {
+          "kind": "value",
+          "ty": "DNSRecord"
+        }
+      },
+      {
+        "name": "names",
+        "index": 2,
+        "kind": "list",
+        "item": "String"
+      },
+      {
+        "name": "next_id",
+        "index": 3,
+        "kind": "sequence",
+        "ty": "U64"
+      },
+      {
+        "name": "owner",
+        "index": 4,
+        "kind": "named_key",
+        "named_key": "owner",
+        "ty": "Key"
+      },
+      {
+        "name": "aliases",
+        "index": 5,
+        "kind": "dictionary",
+        "dictionary": "aliases",
+        "key": "String",
+        "key_encoding": "utf8",
+        "value": "String"
+      }
+    ]
+  }
+}

@@ -158,6 +158,26 @@ pub fn example_erc20_schema() -> ContractSchema {
                 ),
             ],
         )),
+        #[cfg(feature = "storage")]
+        storage: StorageKind::module(vec![
+            StorageField::new("name", 1, StorageKind::value(NamedCLType::String)),
+            StorageField::new("symbol", 2, StorageKind::value(NamedCLType::String)),
+            StorageField::new("decimals", 3, StorageKind::value(NamedCLType::U8)),
+            StorageField::new("total_supply", 4, StorageKind::value(NamedCLType::U256)),
+            StorageField::new(
+                "balances",
+                5,
+                StorageKind::mapping(NamedCLType::Key, StorageKind::value(NamedCLType::U256)),
+            ),
+            StorageField::new(
+                "allowances",
+                6,
+                StorageKind::mapping(
+                    NamedCLType::Key,
+                    StorageKind::mapping(NamedCLType::Key, StorageKind::value(NamedCLType::U256)),
+                ),
+            ),
+        ]),
     }
 }
 

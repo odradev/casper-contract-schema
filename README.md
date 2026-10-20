@@ -39,6 +39,8 @@ Root of schema is an object with the following properties:
 - `events` - List of events.
 - `call` - Optional section for description of the `call` method. `null` when not
   present.
+- `storage` - Description of the contract storage. Present only
+  when the crate is built with the `storage` feature.
 
 ### Types
 Types section is used to defined all the custom defined types in `entry_points`
@@ -97,6 +99,29 @@ Events are a list of named types. Each event has following properties:
 - `ty` - Type of the event.
 
 It is design to allow reuse the same type with different names.
+
+### Storage (Odra only)
+Available only when the crate is built with the `odra` feature. It describes
+where each field of an Odra module lives in the contract storage, so the state
+of a deployed contract can be read without calling any entry point.
+
+The layout is a tree. Every node has a `kind` and the root is always a `module`:
+- `value` - a single value (`Var<T>`). Properties: `ty`.
+- `mapping` - a key-value store (`Mapping<K, V>`). Properties: `key` (type) and
+  `value` (a nested node, either a `value` or a whole `module`).
+- `list` - an indexed collection (`List<T>`). Properties: `item`.
+- `sequence` - a counter (`Sequence<T>`). Properties: `ty`.
+- `module` - a composition of other modules (`SubModule<M>` or the contract
+  itself). Properties: `fields`.
+- `named_key` - a value stored under a Casper named key. Properties:
+  `named_key` (its name) and `ty`.
+- `dictionary` - a value stored in a Casper dictionary. Properties:
+  `dictionary` (its name), `key` (type), `key_encoding` (`utf8`, `base64` or
+  `hex_hash`) and `value` (type).
+
+Each entry of `fields` carries `name` (the field name in the module struct),
+`index` (1-based position in the module) and the properties of its node
+flattened into the same object.
 
 [dns_schema.json]: ./casper-contract-schema/examples/dns_schema.json
 [erc20_schema.json]: ./casper-contract-schema/examples/erc20_schema.json

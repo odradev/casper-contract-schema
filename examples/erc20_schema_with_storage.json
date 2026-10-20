@@ -1,0 +1,303 @@
+{
+  "casper_contract_schema_version": 1,
+  "toolchain": "rustc 1.73.0 (cc66ad468 2023-10-03)",
+  "toolkit": {
+    "name": "Odra",
+    "version": "2.9.0"
+  },
+  "authors": [
+    "John Doe <john@doe.com>"
+  ],
+  "repository": "https://github.com/casper-ecosystem/casper-contract-schema",
+  "homepage": "https://john.doe.com",
+  "contract_name": "Erc20",
+  "contract_version": "0.1.0",
+  "types": [
+    {
+      "struct": {
+        "name": "Transfer",
+        "description": "Transfer event",
+        "members": [
+          {
+            "name": "from",
+            "description": "Sender of tokens.",
+            "ty": {
+              "Option": "Key"
+            }
+          },
+          {
+            "name": "to",
+            "description": "Recipient of tokens.",
+            "ty": {
+              "Option": "Key"
+            }
+          },
+          {
+            "name": "value",
+            "description": "Transfered amount.",
+            "ty": "U256"
+          }
+        ]
+      }
+    },
+    {
+      "struct": {
+        "name": "Approval",
+        "description": "Approval event",
+        "members": [
+          {
+            "name": "owner",
+            "description": null,
+            "ty": {
+              "Option": "Key"
+            }
+          },
+          {
+            "name": "spender",
+            "description": null,
+            "ty": {
+              "Option": "Key"
+            }
+          },
+          {
+            "name": "value",
+            "description": null,
+            "ty": "U256"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "name": "InsufficientFunds",
+      "description": "Insufficient funds",
+      "discriminant": 100
+    },
+    {
+      "name": "InsufficientAllowance",
+      "description": "Insufficient allowance",
+      "discriminant": 101
+    }
+  ],
+  "entry_points": [
+    {
+      "name": "transfer",
+      "description": "Transfer tokens to another account",
+      "is_mutable": true,
+      "is_payable": false,
+      "arguments": [
+        {
+          "name": "recipient",
+          "description": null,
+          "ty": "Key",
+          "optional": false
+        },
+        {
+          "name": "amount",
+          "description": null,
+          "ty": "U256",
+          "optional": false
+        }
+      ],
+      "return_ty": "Unit",
+      "is_contract_context": true,
+      "access": "public"
+    },
+    {
+      "name": "transfer_from",
+      "description": "Transfer tokens from one account to another",
+      "is_mutable": true,
+      "is_payable": false,
+      "arguments": [
+        {
+          "name": "owner",
+          "description": null,
+          "ty": "Key",
+          "optional": false
+        },
+        {
+          "name": "recipient",
+          "description": null,
+          "ty": "Key",
+          "optional": false
+        },
+        {
+          "name": "amount",
+          "description": null,
+          "ty": "U256",
+          "optional": false
+        }
+      ],
+      "return_ty": "Unit",
+      "is_contract_context": true,
+      "access": "public"
+    },
+    {
+      "name": "approve",
+      "description": "Approve spender to use tokens on behalf of the owner",
+      "is_mutable": true,
+      "is_payable": false,
+      "arguments": [
+        {
+          "name": "spender",
+          "description": null,
+          "ty": "Key",
+          "optional": false
+        },
+        {
+          "name": "amount",
+          "description": null,
+          "ty": "U256",
+          "optional": false
+        }
+      ],
+      "return_ty": "Unit",
+      "is_contract_context": true,
+      "access": "public"
+    },
+    {
+      "name": "allowance",
+      "description": "Check the amount of tokens that an owner allowed to a spender",
+      "is_mutable": false,
+      "is_payable": false,
+      "arguments": [
+        {
+          "name": "owner",
+          "description": null,
+          "ty": "Key",
+          "optional": false
+        },
+        {
+          "name": "spender",
+          "description": null,
+          "ty": "Key",
+          "optional": false
+        }
+      ],
+      "return_ty": "U256",
+      "is_contract_context": true,
+      "access": "public"
+    },
+    {
+      "name": "balance_of",
+      "description": "Check the amount of tokens owned by an account",
+      "is_mutable": false,
+      "is_payable": false,
+      "arguments": [
+        {
+          "name": "owner",
+          "description": null,
+          "ty": "Key",
+          "optional": false
+        }
+      ],
+      "return_ty": "U256",
+      "is_contract_context": true,
+      "access": "public"
+    },
+    {
+      "name": "total_supply",
+      "description": "Check the total supply of tokens",
+      "is_mutable": false,
+      "is_payable": false,
+      "arguments": [],
+      "return_ty": "U256",
+      "is_contract_context": true,
+      "access": "public"
+    }
+  ],
+  "events": [
+    {
+      "name": "event_Transfer",
+      "ty": "Transfer"
+    },
+    {
+      "name": "event_Approval",
+      "ty": "Approval"
+    }
+  ],
+  "call": {
+    "wasm_file_name": "erc20.wasm",
+    "description": "Fungible token",
+    "arguments": [
+      {
+        "name": "name",
+        "description": "Name of the token",
+        "ty": "String",
+        "optional": false
+      },
+      {
+        "name": "symbol",
+        "description": "Symbol of the token",
+        "ty": "String",
+        "optional": false
+      },
+      {
+        "name": "decimals",
+        "description": "Number of decimals",
+        "ty": "U8",
+        "optional": false
+      },
+      {
+        "name": "initial_supply",
+        "description": "Initial supply of tokens",
+        "ty": "U256",
+        "optional": false
+      }
+    ]
+  },
+  "storage": {
+    "kind": "module",
+    "fields": [
+      {
+        "name": "name",
+        "index": 1,
+        "kind": "value",
+        "ty": "String"
+      },
+      {
+        "name": "symbol",
+        "index": 2,
+        "kind": "value",
+        "ty": "String"
+      },
+      {
+        "name": "decimals",
+        "index": 3,
+        "kind": "value",
+        "ty": "U8"
+      },
+      {
+        "name": "total_supply",
+        "index": 4,
+        "kind": "value",
+        "ty": "U256"
+      },
+      {
+        "name": "balances",
+        "index": 5,
+        "kind": "mapping",
+        "key": "Key",
+        "value": {
+          "kind": "value",
+          "ty": "U256"
+        }
+      },
+      {
+        "name": "allowances",
+        "index": 6,
+        "kind": "mapping",
+        "key": "Key",
+        "value": {
+          "kind": "mapping",
+          "key": "Key",
+          "value": {
+            "kind": "value",
+            "ty": "U256"
+          }
+        }
+      }
+    ]
+  }
+}

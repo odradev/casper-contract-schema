@@ -2,6 +2,8 @@ use casper_contract_schema::{
     Access, Argument, ContractSchema, CustomType, Entrypoint, EnumVariant, Event, NamedCLType,
     StructMember, Toolkit, TypeName,
 };
+#[cfg(feature = "storage")]
+use casper_contract_schema::{KeyEncoding, StorageField, StorageKind};
 
 type IPv4 = [u8; 4];
 type IPv6 = [u8; 16];
@@ -125,6 +127,34 @@ fn enum_example_schema() -> ContractSchema {
             Event::new("event_RecordRemoved", "DNSRecord"),
         ],
         call: None,
+        #[cfg(feature = "storage")]
+        storage: StorageKind::module(vec![
+            StorageField::new(
+                "records",
+                1,
+                StorageKind::mapping(
+                    NamedCLType::String,
+                    StorageKind::value(NamedCLType::Custom(String::from("DNSRecord"))),
+                ),
+            ),
+            StorageField::new("names", 2, StorageKind::list(NamedCLType::String)),
+            StorageField::new("next_id", 3, StorageKind::sequence(NamedCLType::U64)),
+            StorageField::new(
+                "owner",
+                4,
+                StorageKind::named_key("owner", NamedCLType::Key),
+            ),
+            StorageField::new(
+                "aliases",
+                5,
+                StorageKind::dictionary(
+                    "aliases",
+                    NamedCLType::String,
+                    KeyEncoding::Utf8,
+                    NamedCLType::String,
+                ),
+            ),
+        ]),
     }
 }
 

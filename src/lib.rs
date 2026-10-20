@@ -6,6 +6,11 @@ use serde::{Deserialize, Serialize};
 mod ty;
 pub use ty::NamedCLType;
 
+#[cfg(feature = "storage")]
+mod storage;
+#[cfg(feature = "storage")]
+pub use storage::{KeyEncoding, StorageField, StorageKind};
+
 /// Contract definition.
 #[derive(Serialize, Deserialize, JsonSchema, Debug)]
 pub struct ContractSchema {
@@ -22,6 +27,8 @@ pub struct ContractSchema {
     pub entry_points: Vec<Entrypoint>,
     pub events: Vec<Event>,
     pub call: Option<CallMethod>,
+    #[cfg(feature = "storage")]
+    pub storage: StorageKind,
 }
 
 impl ContractSchema {
